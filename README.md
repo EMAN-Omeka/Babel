@@ -17,6 +17,7 @@ The module installs as usual, but you need to modify a core file.
 
 In  application/libraries/globals.php, the declaration of these two functions must be changed to this :
 
+```php
 function metadata($record, $metadata, $options = array())
 {
     return get_view()->translatedMetadata($record, $metadata, $options);
@@ -26,6 +27,7 @@ function all_element_texts($record, $options = array())
 {
     return get_view()->translatedElementTexts($record, $options);
 }
+```
 
 It ensures the two helpers which have been rewritten for this module are called instead of Omeka's. 
 
@@ -52,5 +54,5 @@ The following elements are NOT translated, as of now :
 - site's information
 - exhibits
 
-Once an element is trasnlated, the plugin detects the currrent language and displays the matching translation if it exists, the default language string if it doesn't.
+Once an element is translated, the plugin detects the currrent language and displays the matching translation if it exists, the default language string if it doesn't.
 
