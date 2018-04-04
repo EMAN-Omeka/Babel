@@ -1,11 +1,11 @@
-** Purpose **
+**Purpose**
 
 This module aims to provide an elegant way to translate Omeka CONTENT, as opposed to Omeka interface strings, which are handled via the usual gettext technology.
 
 It provides a hopefuly seemless integration of translation features directly into standard Omeka content management forms.
 
 
-** Installation **
+**Installation**
 
 Make sure SwitchLanguage is installed and activated.
 
@@ -33,7 +33,7 @@ The code changes are minor and shouldn't impact your site performance.
 
 This is a rather drastic choice, as modifying core is usually a bad idea, but thein this case we considered the plugin's added value to be so high it was worth it.
 
-** Usage **
+**Usage**
 
 On each content editing page, for each field entry, instead of the usual textfield, you will see one for each activated langue.
 
