@@ -2,24 +2,31 @@
 
 ## Warning
 
-This plugin is a work in progress. Feedback is much appreciated.
+This plugin is a work in progress. Most things should provided you follow the instructions below, but the code may still be faulty in some places. It shouldn't affect your website in any critical way though.
+
+Feedback is much appreciated.
 
 ## Purpose
 
-This module aims to provide an elegant way to translate Omeka CONTENT, as opposed to Omeka interface strings, which are handled via the usual gettext technology.
+This module aims to provide an elegant way to translate Omeka **content**, as opposed to Omeka interface strings, which are handled via the usual gettext technology.
 
-It provides a hopefuly seemless integration of translation features directly into standard Omeka content management forms.
+It provides a hopefully seamless integration of translation features directly into standard Omeka content management forms.
 
+It is designed to work well with our other plugin, [UiTemplates](https://github.com/ENS-ITEM/UiTemplates).
+
+## Prerequisites
+
+Make sure [SwitchLanguage](https://gitlab.com/TIME_LAS/Omeka_Plugin_SwitchLang/) is installed and activated.
 
 ## Installation
 
-Make sure SwitchLanguage is installed and activated.
-
-Configure available languages at `http://yoursite.com/admin/plugins/config? name=SwitchLanguage`.
+Configure available languages via the SwitchLanguage interface at `http://yoursite.com/admin/plugins/config?name=SwitchLanguage`.
 
 The "Flag only" option is highly recommended, otherwise the admin screens will function badly.
 
-The module installs as usual, but you need to modify a core file.
+The module must be installed as usual, but you need to modify some files.
+
+#### Core
 
 In  `application/libraries/globals.php`, the declaration of these two functions must be changed to this :
 
@@ -41,24 +48,77 @@ The code changes are minor and shouldn't impact your site performance.
 
 This is a rather drastic choice, as modifying core is usually a bad idea, but in this case we considered the plugin's added value to be so high it was worth it.
 
+If you happen to deactivate the plugin at some point in the future, the translation won't work, obviously, but as long as you don't deactivate the module, your theme shouldn't spit errors, as the function declaration would still be there.
+
+#### Theme
+
+To fully enjoy all the plugin's functionalities, you have to make some modifications to your theme.
+
+First, all strings you want to be translated must be passed to the function ```t()```.
+
+For example, if you have a sentence somewhere in your theme : ``This page is about blah``, you should change the code from :
+
+```php
+echo "This page is about blah";
+```
+
+to :
+
+```php
+echo t("This page is about blah");
+```
+
+The list of translatable strings is in the file ``themeStrings.php`` , in the plugin's base directory. A future version will include a ``t()``  self learning function to add new strings. In the meantime, this file must contain all the strings which are in your theme and you want to translate by this mean.
+
+The array is splitted into categories to clarify the resulting form at ``/admin/babel/terms`` .
+
+You can create as many categories and strings as you want, provided you respect the basic structure of the array.
+
+#### Menus
+
+Menus translation is a bit tricky, because it depends on how yours are set up in your theme.
+
+Basicaly, you have to pass your menu string to the appropriate Babel function.
+
+Where you would usually call, for example : 
+
+```php
+echo public_nav_main()->setUlClass('menu-tabs')->render();
+```
+
+... you will instead write :
+
+```php
+echo BabelPlugin::translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
+```
+
 ## Usage
 
-On each content editing page, for each field entry, instead of the usual textfield, you will see one for each activated langue.
+On each content editing page, for each field entry, instead of the usual textfield, you will see one for each activated language.
 
-You can enable the WYSIWYG editor for each field entry, but you'll need to save the content once after added entries for the editor to become available.
+Enabling the HTML editor will affect the original field and all the translation fields as well.
 
 The following elements can be translated :
 
 - Items
-- collections
-- files
+- Collections
+- Files
 - Simple Pages
+- Menus
+- String echoed in theme files (via the ``t()`` function)
 
 The following elements are NOT translated, as of now :
 
-- menus
-- site's information
-- exhibits
+- Site's information
+- Exhibits
 
-Once an element is translated, the plugin detects the currrent language and displays the matching translation if it exists, the default language string if it doesn't.
+Once an element is translated, the plugin detects the current language and displays the matching translation if it exists, the default language string if it doesn't.
+
+## Possible upcoming upgrades
+
+- t() learns strings automatically 
+
+## Credits
+
+Plugin coded for the EMAN platform (Item, ENS-CNRS) by Vincent Buard [(Numerizen)](http://numerizen.com).
 

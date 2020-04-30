@@ -1,23 +1,36 @@
 $ = jQuery;
-$(window).load(function() {
-  $.each($('fieldset.set .field .input-block'), function () {
-    tog = $(this).find('.use-html').detach();   
-    tog.insertAfter($(this).find('.input textarea:first'));
-  });
-  $.each($('.use-tiny:checked'), function () {
-    el = $(this).attr('name');
-    tinyMCE.execCommand('mceAddControl', true, el.substring(0, el.length - 6) + '[text]');
-    console.log($(this).attr('name'));
-    console.log($(this).attr('checked'));
-  });  
-    $('.use-tiny').click(function() {
-      var el = $(this).attr('name');
-      console.log(el);
-      var textarea = el.substring(0, el.length - 6) + '[text]';
-        if ($(this).is(':checked')) {
-            tinyMCE.execCommand('mceAddControl', true, textarea);
-        } else {
-            tinyMCE.execCommand('mceRemoveControl', true, textarea);
-        }
-    });
-});
+
+/**
+ * Enable the WYSIWYG editor for "html-editor" fields on the form, and allow
+ * checkboxes to create editors for more fields.
+ *
+ * @param {Element} element The element to search at and below.
+ */
+/*
+$(document).ready(function() {
+    Omeka.Elements.enableWysiwyg = function (element) {
+        $(element).find('div.inputs .use-html-checkbox').each(function () {
+            var textarea = $(this).parents('.input-block').find('textarea');
+            if (textarea.length) {
+                var enableIfChecked = function () {
+                    checkBox = this;                   
+                    $(textarea).each(function(i, ta) {
+                      var textareaId = $(ta).attr('id');
+                      if (checkBox.checked) {
+                          tinyMCE.EditorManager.execCommand("mceAddEditor", false, textareaId);
+                      } else {
+                          tinyMCE.EditorManager.execCommand("mceRemoveEditor", false, textareaId);
+                      }                      
+                    });
+                };
+
+                enableIfChecked.call(this);
+
+                // Whenever the checkbox is toggled, toggle the WYSIWYG editor.
+                $(this).click(enableIfChecked);
+            }
+        });
+    };
+  Omeka.Elements.enableWysiwyg('#item-form');      
+})
+*/
