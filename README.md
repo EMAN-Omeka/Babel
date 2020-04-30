@@ -48,8 +48,6 @@ The code changes are minor and shouldn't impact your site performance.
 
 This is a rather drastic choice, as modifying core is usually a bad idea, but in this case we considered the plugin's added value to be so high it was worth it.
 
-If you happen to deactivate the plugin at some point in the future, the translation won't work, obviously, but as long as you don't deactivate the module, your theme shouldn't spit errors, as the function declaration would still be there.
-
 #### Theme
 
 To fully enjoy all the plugin's functionalities, you have to make some modifications to your theme.
@@ -73,6 +71,8 @@ The list of translatable strings is in the file ``themeStrings.php`` , in the pl
 The array is splitted into categories to clarify the resulting form at ``/admin/babel/terms`` .
 
 You can create as many categories and strings as you want, provided you respect the basic structure of the array.
+
+If you happen to deactivate the plugin at some point in the future, the translation won't work, obviously, but as long as you don't deactivate the module, your theme shouldn't spit errors, as the function declaration would still be there.
 
 #### Menus
 
