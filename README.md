@@ -1,4 +1,4 @@
-# Babel - Content Translation for Omeka
+# Babel - Content Translation for Omeka Classic
 
 ## Warning
 
@@ -105,7 +105,7 @@ The following elements can be translated :
 - Files
 - Simple Pages
 - Menus
-- String echoed in theme files (via the ``t()`` function)
+- Strings echoed in theme files (via the ``t()`` function)
 
 The following elements are NOT translated, as of now :
 
@@ -116,7 +116,7 @@ Once an element is translated, the plugin detects the current language and displ
 
 ## Possible upcoming upgrades
 
-- t() learns strings automatically 
+- t() learns strings automatically (add them to its dictionnary when it isn't there already).
 
 ## Credits
 
