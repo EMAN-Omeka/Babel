@@ -47,7 +47,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
     {
       $nav[] = array(
                       'label' => __('Babel'),
-                      'uri' => url('babel/simple-vocab'),
+                      'uri' => url('babel/help'),
       								'resource' => 'Babel_Page',		
                     );
       return $nav;
@@ -57,6 +57,9 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
       // Get languages list from SwitchLanguage
       $languages = get_option('languages_options');
       $this->languages = explode('#', $languages);
+      foreach ($this->languages as $i => $language) {
+        $this->languages[$i] = substr($language, 0, 2);
+      }      
       // Get current language from SwitchLanguage
       $lang = getLanguageForOmekaSwitch();      
       $this->current_language = substr($lang, 0, 2);
@@ -266,8 +269,8 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
       if ($record->id == 0) {
       	return $components;
       }
-      foreach ($this->languages as $language) {    
-        $langDisplay = ucfirst(Locale::getDisplayLanguage($language, $this->current_language));           
+      foreach ($this->languages as $language) {  
+        $langDisplay = ucfirst(Locale::getDisplayLanguage($language, $this->current_language));   
         $query = "SELECT text, lang, element_number, html FROM `$db->TranslationRecord` WHERE 
                       element_id = $element->id AND 
                       element_set = $element->element_set_id AND 
@@ -277,11 +280,6 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
                       record_type = '$type'";
         $text = $db->query($query)->fetchAll();      
         $checked = '';
-/*
-      if ($element->name == 'Type') {
-        Zend_Debug::dump($components);        
-      }
-*/        
         if (isset($text[0])) {
           $text = $text[0];
           $text['html'] == 1 ? $checked = "checked" : $checked = '';             
@@ -290,24 +288,29 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
         } else {
           $content = '';          
         }
-//           Zend_Debug::dump($content);
+
         // Locale sur première occurrence
         $elementId = $stem . '[translation][' . $language . '][text]';
         $htmlBoxName = $stem . '[translation][' . $language . '][html]';
-        $defLangDisplay = ucfirst(Locale::getDisplayLanguage(get_option('locale_lang_code'), $this->current_language));                  
-        if (substr_count($components['input'], '<textarea') == 1) {
-          $components['input'] = str_replace('<textarea' , "<span style='font-style:italic;'>$defLangDisplay</span><textarea", $components['input']);
+        $defLangDisplay = ucfirst(Locale::getDisplayLanguage(get_option('locale_lang_code'), $this->current_language));   
+        if (substr_count($components['input'], '<textarea') >= 1) {
+          if (strpos($components['input'], $defLangDisplay) == 0) {
+            $components['input'] = str_replace('<textarea' , "<span style='font-style:italic;'>$defLangDisplay</span><textarea", $components['input']); 
+          }
           $components['input'] .= "<span style='font-style:italic;clear:left;display:block;'>" . $langDisplay . "</span><textarea name='" . $elementId . "' id='" . $elementId . "' rows='3' cols='50' aria-hidden='true'>" . $content . "</textarea>";
-        } elseif (substr_count($components['input'], '<select') == 1) {
-          $liste = $components['input'];
-          $components['input'] = str_replace('<select' , "<span style='font-style:italic;width:300px;'>$defLangDisplay</span><select", $components['input']); 
+        } elseif (substr_count($components['input'], '<select') >= 1) {
+          if (strpos($components['input'], $defLangDisplay) == 0) {            
+            $components['input'] = str_replace('<select' , "<span style='font-style:italic;width:300px;'>$defLangDisplay</span><select", $components['input']); 
+          }
           $options = "";
-          $translations = $db->query("SELECT text FROM `$db->TranslationRecords` WHERE record_type = 'SimpleVocab' AND element_id = " . $element->id)->fetchAll();
-          $translations = explode(PHP_EOL, $translations[0]['text']);
-          foreach ($translations as $i => $translation) {
-            trim($content) == trim($translation) ? $selected = 'selected' : $selected = '';
-            $options .= "<option $selected>" . $translation . "</option>";
-          }   
+          $translations = $db->query("SELECT text FROM `$db->TranslationRecords` WHERE lang = '$language' AND record_type = 'SimpleVocab' AND element_id = " . $element->id)->fetchAll();
+          if (isset($translations[0]['text'])) {
+            $translations = explode(PHP_EOL, $translations[0]['text']);
+            foreach ($translations as $i => $translation) {
+              trim($content) == trim($translation) ? $selected = 'selected' : $selected = '';
+              $options .= "<option $selected>" . $translation . "</option>";
+            }               
+          }
           $components['input'] .= "<span style='font-style:italic;clear:left;display:block;'>" . $langDisplay . "</span><select name='" . $elementId . "' id='" . $elementId . "'>$options</select>";
         }        
       }
@@ -355,25 +358,48 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   }      
   
   public function translateMenu($menuString) {
+    $current_lang = substr(getLanguageForOmekaSwitch(), 0, 2);
+    $default_lang = substr(get_option('locale_lang_code'), 0, 2);
+//     echo $default_lang . '/' . $current_lang;
+    if ($current_lang == $default_lang) {
+      return $menuString;
+    }
     $dom = new DOMDocument;
     @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $menuString);
     $elements = $dom->getElementsByTagName('li');
     $originals = [];
     foreach ($elements as $i => $li) {
+/*
+      $uls = $li->getElementsByTagName('ul');
+      for ($x = $uls->length; $x--; 0) {
+        $y = $uls->item($x);
+        $y->parentNode->removeChild($y); 
+      }
+*/
       $originals[] = trim($li->nodeValue);  
     }
     unset($dom);
     $db = get_db();
-    $menuTranslations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'Menu'")->fetchAll();  
+    $menuTranslations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'Menu' AND lang = '" . $current_lang . "'")->fetchAll();  
     $translations = [];
     foreach ($menuTranslations as $i => $menuTranslation) {
-      $translations[] = $menuTranslations[$i]['text'];    
+      if (trim($menuTranslations[$i]['text']) <> '' && isset($menuTranslations[$i]['text'])) {
+        $translations[] = $menuTranslations[$i]['text'];     
+//         echo $menuTranslations[$i]['text'] . '<br />';               
+      } else {
+        $translations[] = $originals[$i];
+      }
     }    
-    $menu = str_replace($originals, $translations, $menuString);    
+
+//     Zend_Debug::dump($menuTranslations);  
+/*    Zend_Debug::dump($originals);    
+    Zend_Debug::dump($translations);    
+*/
+    $menu = str_replace($originals, $translations, $menuString);
     return $menu;
   }
+  
 } 
 
-function t($string) {
-  return BabelPlugin::translate($string);
-}  
+
+

@@ -5,14 +5,15 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
     // Get current language from SwitchLanguage
     $this->current_language = substr(getLanguageForOmekaSwitch(), 0, 2);  	
     $this->languages = explode("#", get_option('languages_options'));
+    foreach ($this->languages as $i => $language) {
+      $this->languages[$i] = substr($language, 0, 2);
+    }
     // Remove default language from language list
     $locale = get_option('locale_lang_code');
     // TODO : Supprimer ce code ?
-/*
     if (($key = array_search($locale, $this->languages)) !== false) {
         unset($this->languages[$key]);
     }
-*/
 	}
 	
 	public function helpAction () {
@@ -30,7 +31,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
  				$db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'Menu'");
         foreach ($this->languages as $lang) {      			
           foreach ($texts as $element_id => $translations) {
-            $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Menu', 0, $element_id, 0, '" . $translations['lang_' . $element_id . '_' . $lang] . "', " . $db->quote($translations['ElementMenuTranslation_' . $element_id]) . ", 0)";
+            $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Menu', 0, $element_id, 0, '" . substr($translations['lang_' . $element_id . '_' . $lang], 0, 2) . "', " . $db->quote($translations['ElementMenuTranslation_' . $element_id . '_' . $lang]) . ", 0)";
             $db->query($query);				              
   				}
   			}  			
@@ -42,23 +43,28 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
   public function getMenusForm() {
     $db = get_db();
     $menuTranslations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'Menu'")->fetchAll();
+    $translations = [];    
+    foreach ($menuTranslations as $x => $translationRecord) {
+      $translations[$translationRecord['element_id']][$translationRecord['lang']] = $translationRecord['text'];
+    }
 		$form = new Zend_Form();
 		$form->setName('BabelTranslationMenuForm');   
 		
     $dom = new DOMDocument;
     @$dom->loadHTML('<?xml encoding="utf-8" ?>' . public_nav_main()->setUlClass('auteur-onglets')->render());
     $elements = $dom->getElementsByTagName('li');
+    $default_language = ucfirst(Locale::getDisplayLanguage(get_option('locale_lang_code'), Zend_Registry::get('Zend_Locale')));    
     foreach ($elements as $i => $li) {
       $j = $i + 1;
       $text = trim($li->nodeValue);
  			$original = new Zend_Form_Element_Note('ElementMenu_' . $j);
+ 			$original->setLabel($default_language);       								
  			$original->setValue("<h3>" . $text. "</h3>");       								
  			$original->setBelongsto($j);  
  			$form->addElement($original);	
  			 			
-      $default_language = ucfirst(Locale::getDisplayLanguage(get_option('locale_lang_code'), Zend_Registry::get('Zend_Locale')));
       foreach ($this->languages as $lang) {    
-       	$language = new Zend_Form_Element_Hidden('lang_' . $j . '_' . $lang);
+       	$language = new Zend_Form_Element_Hidden('lang_' . $j . '_'  . $lang);
        	$language->setValue($lang);
    			$language->setBelongsto($j);  
        	$form->addElement($language);    
@@ -66,8 +72,10 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
     		// Corps
     		$textMenu = new Zend_Form_Element_Text('texte');
     		$textMenu->setLabel(ucfirst(Locale::getDisplayLanguage($lang, $this->current_language)));
-    		$textMenu->setName('ElementMenuTranslation_' . $j);
-    		$textMenu->setValue($menuTranslations[$i]['text']);
+    		$textMenu->setName('ElementMenuTranslation_' . $j . '_'  . $lang);
+    		if (isset($translations[$j][$lang])) {
+      		$textMenu->setValue($translations[$j][$lang]);      		
+    		}
    			$textMenu->setBelongsto($j);  
     		$form->addElement($textMenu);		
       }       
@@ -113,7 +121,8 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
  				$db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'SimpleVocab'");
         foreach ($this->languages as $lang) {      			
           foreach ($texts as $element_id => $translations) {
-            $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'SimpleVocab', 0, $element_id, 0, '" . $translations['lang_' . $element_id . '_' . $lang] . "', " . $db->quote($translations['ElementNameTranslation_' . $element_id]) . ", 0)";
+//             Zend_Debug::dump($translations);
+            $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'SimpleVocab', 0, $element_id, 0, '" . $translations['lang_' . $element_id . '_' . $lang] . "', " . $db->quote($translations['ElementNameTranslation_' . $element_id . '_' . $lang]) . ", 0)";
             $db->query($query);				              
   				}
   			}
@@ -198,41 +207,50 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
 	{	
 		$db = get_db();
 		// Retrieve translations for this page type from DB
-		$terms = $db->query("SELECT t.element_id id, t.terms terms, e.name name, tr.text trans 
+		$translatedTerms = $db->query("SELECT t.element_id id, t.terms terms, e.name name, tr.text trans, tr.lang lang 
 		                     FROM `$db->SimpleVocabTerms` t 
 		                      LEFT JOIN `$db->Elements` e ON e.id = t.element_id 
 		                      LEFT JOIN `$db->TranslationRecords` tr ON tr.element_id = t.element_id")->fetchAll();
 		                      
 		$form = new Zend_Form();
 		$form->setName('BabelTranslationSVForm');
-    foreach ($terms as $i => $term) {
-
+		// TODO : Synchro $terms / form
+		$terms = [];
+		foreach ($translatedTerms as $i => $term) {
+      $terms[$term['id']]['name'] = $term['name'];
+      $terms[$term['id']]['terms'] = $term['terms'];
+  		$terms[$term['id']][$term['lang']] = $term['trans'];
+		}
+// 		Zend_Debug::dump($terms);
+    foreach ($terms as $id => $term) {
   		// Element
- 			$original = new Zend_Form_Element_Note('ElementName_' . $term['id']);
+ 			$original = new Zend_Form_Element_Note('ElementName_' . $id);
  			$original->setValue("<h3>" . __($term['name']) . "</h3>");       								
  			$form->addElement($original);	
       $default_language = ucfirst(Locale::getDisplayLanguage(get_option('locale_lang_code'), Zend_Registry::get('Zend_Locale')));
-      foreach ($this->languages as $lang) {            
-       	$language = new Zend_Form_Element_Hidden('lang_' . $term['id'] . '_' . $lang);
+      foreach ($this->languages as $lang) {     
+       	$language = new Zend_Form_Element_Hidden('lang_' . $id . '_' . $lang);
        	$language->setValue($lang);
-   			$language->setBelongsto($term['id']);  
+   			$language->setBelongsto($id);  
        	$form->addElement($language);    
-        $lines = substr_count($term['terms'], PHP_EOL) + 1;
-
+       	
     		// Original
-   			$original = new Zend_Form_Element_Note('OriginalTerm_' . $term['id']);
+   			$original = new Zend_Form_Element_Note('OriginalTerm_' . $id);
    			$original->setValue(nl2br($term['terms']) . '<br /><br />'); 
        	$original->setLabel($default_language);
-   			$original->setBelongsto($term['id']);  
+   			$original->setBelongsto($id);  
    			$form->addElement($original);   
-    		      
+    		              
     		// Corps
+        $lines = substr_count($term['terms'], PHP_EOL) + 1;    		
     		$textTerm = new Zend_Form_Element_Textarea('texte');
     		$textTerm->setAttrib('rows', $lines);
     		$textTerm->setLabel(ucfirst(Locale::getDisplayLanguage($lang, $this->current_language)));
-    		$textTerm->setName('ElementNameTranslation_' . $term['id']);
-    		$textTerm->setValue($term['trans']);
-   			$textTerm->setBelongsto($term['id']);  
+    		$textTerm->setName('ElementNameTranslation_' . $id . '_' . $lang);
+    		if ($term[$lang] <> '') {
+      		$textTerm->setValue($term[$lang]);      		
+    		}
+   			$textTerm->setBelongsto($id);  
     		$form->addElement($textTerm);		
       }      
     }
@@ -243,12 +261,14 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
 		$form->addElement($submit);
     
     $form = $this->prettifyForm($form);
+/*
     $elements = $form->getElements();
     foreach ($elements as $elem) {
       if ($elem instanceof Zend_Form_Element_Hidden) {
        $elem->clearDecorators();        
       }
-    }		
+    }	
+*/	
                 
 		return $form;
   }
