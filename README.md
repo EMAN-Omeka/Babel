@@ -2,7 +2,7 @@
 
 ## Warning
 
-This plugin is a work in progress. Most things should provided you follow the instructions below, but the code may still be faulty in some places. It shouldn't affect your website in any critical way though.
+This plugin is a work in progress. Most things should work provided you follow the instructions below, but the code may still be faulty in some places. It shouldn't affect your website in any critical way though.
 
 Feedback is much appreciated.
 
@@ -68,17 +68,17 @@ echo t("This page is about blah");
 
 The list of translatable strings is in the file ``themeStrings.php`` , in the plugin's base directory. A future version will include a ``t()``  self learning function to add new strings. In the meantime, this file must contain all the strings which are in your theme and you want to translate by this mean.
 
-The array is splitted into categories to clarify the resulting form at ``/admin/babel/terms`` .
+The array is split into categories to clarify the resulting form at ``/admin/babel/terms`` .
 
 You can create as many categories and strings as you want, provided you respect the basic structure of the array.
 
-If you happen to deactivate the plugin at some point in the future, the translation won't work, obviously, but as long as you don't deactivate the module, your theme shouldn't spit errors, as the function declaration would still be there.
+If you happen to deactivate the plugin at some point in the future, the translation won't work, obviously, but as long as you don't deactivate the module, your theme shouldn't throw errors, as the function declaration would still be there.
 
 #### Menus
 
 Menus translation is a bit tricky, because it depends on how yours are set up in your theme.
 
-Basicaly, you have to pass your menu string to the appropriate Babel function.
+Basically, you have to pass your menu string to the appropriate Babel function.
 
 Where you would usually call, for example : 
 
@@ -116,7 +116,7 @@ Once an element is translated, the plugin detects the current language and displ
 
 ## Possible upcoming upgrades
 
-- t() learns strings automatically (add them to its dictionnary when it isn't there already).
+- t() learns strings automatically (add them to its dictionary when it's not already there).
 
 ## Credits
 

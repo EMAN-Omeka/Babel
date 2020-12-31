@@ -1,21 +1,21 @@
 <?php
 $strings = array(
   'Notices' => array(
-     'Notice créée le ', 
+     'Notice créée le ',
      'Dernière modification le ',
      'Auteur',
      'Auteurs',
-     'Collection',  	 
-     'Autres notices de la collection'                     , 
+     'Collection',
+     'Autres notices de la collection'                     ,
      'Voir les autres notices de cette collection',
      'En passant la souris sur une vignette, le titre de l\'image apparait.',
      'Fichier(s)',
      'Notice créée par',
-     'Notice',    	 
+     'Notice',
      'notice',
-     'notices',                         
+     'notices',
   ),
-  'Collections' => array(  	                                
+  'Collections' => array(
      'Collection créée par',
      'Collection créée',
      'Collection créée le',
@@ -26,7 +26,7 @@ $strings = array(
      'Collection parente',
   ),
   'Fichiers' => array(
-      'Fichier créé par',  	                                
+      'Fichier créé par',
       'Autres fichiers de la notice',
       'Fichier créé le',
       'Fichier créé par',
@@ -52,5 +52,7 @@ $strings = array(
       'Terme(s) recherché(s)',
       'Mot(s)-clef(s) recherché(s)',
       'Type de document',
+      'Lire la suite',
+      'Retour à la version réduite',
   ),
 );

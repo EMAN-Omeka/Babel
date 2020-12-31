@@ -1,14 +1,14 @@
 <?php
 /**
  * Omeka
- * 
+ *
  * @copyright Copyright 2007-2012 Roy Rosenzweig Center for History and New Media
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU GPLv3
  */
 
 /**
  * Helper used to retrieve record metadata for for display.
- * 
+ *
  * @package Omeka\View\Helper
  */
 class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
@@ -24,7 +24,7 @@ class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
     /**
      * Retrieve a specific piece of a record's metadata for display.
      *
-     * @param Omeka_Record_AbstractRecord $record Database record representing 
+     * @param Omeka_Record_AbstractRecord $record Database record representing
      * the item from which to retrieve field data.
      * @param string|array $metadata The metadata field to retrieve.
      *  If a string, refers to a property of the record itself.
@@ -50,7 +50,7 @@ class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
      */
     public function translatedMetadata($record, $metadata, $options = array())
     {
-        $lang = getLanguageForOmekaSwitch(); 
+        $lang = getLanguageForOmekaSwitch();
         $this->current_language = substr($lang, 0, 2);
         // Pour index quand multivalue
         $this->elementCounters = array();
@@ -107,20 +107,20 @@ class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
                     $text = $text[$index];
                 }
             }
-        } else if (get_class($record) == 'SimplePagesPage'){ // Simple Page (ou Exhibit ?)      
+        } else if (get_class($record) == 'SimplePagesPage'){ // Simple Page (ou Exhibit ?)
           $db = get_db();
-          $query = "SELECT text FROM `$db->TranslationRecord` WHERE 
+          $query = "SELECT text FROM `$db->TranslationRecord` WHERE
                     lang = '$this->current_language' AND
-                    element_id = 0 AND 
-                    record_id = $record->id AND 
-                    element_number = 0 AND 
-                    record_type = 'SimplePage$metadata'";
+                    element_id = 0 AND
+                    record_id = $record->id AND
+                    element_number = 0 AND
+                    record_type = 'SimplePage" . ucfirst($metadata) . "'";
           if ($translations = $db->query($query)->fetchAll()) {
             if (isset($translations[0])) {
               return $translations[0]['text'];
             }
           } else {
-            return $text;          
+            return $text;
           }
         }
 
@@ -232,30 +232,30 @@ class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
     protected function _process($record, $metadata, $text, $snippet, $escape, $filter)
     {
         $db = get_db();
-         $translated = "";      
+         $translated = "";
           if (is_object($text)) {
             if (! isset($this->elementCounters[$text->element_id])) {
               $this->elementCounters[$text->element_id] = 0;
-            }              
-        
+            }
+
             $element_number = $this->elementCounters[$text->element_id];
-            $query = "SELECT text, lang, element_number FROM `$db->TranslationRecord` WHERE 
+            $query = "SELECT text, lang, element_number FROM `$db->TranslationRecord` WHERE
                     lang = '$this->current_language' AND
-                    element_id = $text->element_id AND 
-                    record_id = $record->id AND 
-                    element_number = $element_number AND 
+                    element_id = $text->element_id AND
+                    record_id = $record->id AND
+                    element_number = $element_number AND
                     record_type = '$text->record_type'";
 //                     echo $query . '<br />';
             $translations = $db->query($query)->fetchAll();
             foreach ($translations as $num => $translation) {
               $translated .=  $translation['text'];
             }
-            $this->elementCounters[$text->element_id]++;         
+            $this->elementCounters[$text->element_id]++;
           }
           if ($translated) {
             $text->text = $translated;
           }
-        
+
         if ($text instanceof ElementText) {
             $elementText = $text;
             $isHtml = $elementText->isHtml();
