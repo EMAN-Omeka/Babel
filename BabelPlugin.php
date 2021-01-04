@@ -82,7 +82,6 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
 
       foreach ($elements as $i => $element) {
         // Pour saisie
-  //         add_filter(array('ElementInput', 'Item', $elementSet->name, $element->name), array($this, 'filterElementInput'));
         add_filter(array('ElementInput', 'Item', $element['esName'], $element['eName']), array($this, 'translateField'), 1000);
         add_filter(array('ElementInput', 'Collection', $element['esName'], $element['eName']), array($this, 'translateField'), 0);
         add_filter(array('ElementInput', 'File', $element['esName'], $element['eName']), array($this, 'translateField'), 0);
@@ -224,7 +223,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
       $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
       $record = $args['record'];
       $elements = $args['record']->Elements;
-      // Is the created via IHM ? If not, quit immediately
+      // Is the item created via IHM ? If not, quit immediately
       if ($args['post']) {
         $data = get_object_vars($args['post']);
       } else {
@@ -319,7 +318,6 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
           $components['input'] .= "<span style='font-style:italic;clear:left;display:block;'>" . $langDisplay . "</span><select name='" . $elementId . "' id='" . $elementId . "'>$options</select>";
         }
       }
-//       Zend_Debug::dump($components);
       return $components;
     }
 
@@ -399,7 +397,6 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
         }
       }
     }
-
     $menu = str_replace($originals, $translations, $menuString);
     return $menu;
   }
