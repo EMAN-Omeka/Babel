@@ -351,7 +351,9 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   }
 
   public function translate($string) {
-    $strings = unserialize(base64_decode(get_option('babel_terms_translations')));
+    if (! $strings = unserialize(base64_decode(get_option('babel_terms_translations')))) {
+      include(PLUGIN_DIR . '/Babel/themeStrings.php');
+    }
     $translations = [];
     foreach(array_values($strings) as $group) {
       foreach ($group as $index => $value) {
