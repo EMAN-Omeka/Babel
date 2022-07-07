@@ -114,8 +114,17 @@ echo BabelPlugin::translateMenu(public_nav_main()->setUlClass('menu-tabs')->rend
 
 or
 
+at the top of your file 
+
 ```php
-    $babel = new BabelPlugin();
+<?php
+$babel = new BabelPlugin();
+?>
+```
+
+and then
+
+```php
     echo $babel->translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
 ```
 
