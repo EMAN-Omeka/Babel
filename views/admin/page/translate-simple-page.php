@@ -9,7 +9,7 @@ echo flash();
 <script type="text/javascript">
 $ = jQuery;
 
-$(window).load(function() {
+$(window).on( "load", function() {
         // Default parameters
 /*
         initParams = {
@@ -49,7 +49,7 @@ $(window).load(function() {
     });
 
     // Add or remove TinyMCE control.
-    $('.babel-use-tiny-mce').click(function() {
+    $('.babel-use-tiny-mce').on( "click", function() {
       var el = $(this).attr('name');
       var textareaId = 'text-' + el.slice(-2) + '-text'  + el.slice(-2);
         if ($(this).is(':checked')) {

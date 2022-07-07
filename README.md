@@ -74,6 +74,26 @@ You can create as many categories and strings as you want, provided you respect 
 
 If you happen to deactivate the plugin at some point in the future, the translation won't work, obviously, but as long as you don't deactivate the module, your theme shouldn't throw errors, as the function declaration would still be there.
 
+To have the breadcrumb of Simple Pages translated, you have to copy "plugins/SimplePages/views/public/page/show.php" in your theme, in "themes/yourtheme/simple-pages/page/show.php". And then you put
+
+```php
+<?php
+$babel = new BabelPlugin();
+?>
+```
+
+at the top of the file and
+
+```php
+<?php echo $babel->simple_pages_display_breadcrumbs_translate(); ?>
+```
+
+instead of
+
+```php
+<?php echo simple_pages_display_breadcrumbs(); ?>
+```
+
 #### Menus
 
 Menus translation is a bit tricky, because it depends on how yours are set up in your theme.
@@ -90,6 +110,22 @@ echo public_nav_main()->setUlClass('menu-tabs')->render();
 
 ```php
 echo BabelPlugin::translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
+```
+
+or
+
+at the top of your file 
+
+```php
+<?php
+$babel = new BabelPlugin();
+?>
+```
+
+and then
+
+```php
+    echo $babel->translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
 ```
 
 ## Usage
