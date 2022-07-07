@@ -403,6 +403,70 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
     return $menu;
   }
 
+    /**
+     * Returns a breadcrumb for a given page.
+     *
+     * @param integer|null The id of the page.  If null, it uses the current simple page.
+     * @param string $separator The string used to separate each section of the breadcrumb.
+     * @param boolean $includePage Whether to include the title of the current page.
+     * @uses public_url(), html_escape()
+     */
+    function simple_pages_display_breadcrumbs_translate($pageId = null, $seperator = ' > ', $includePage = true)
+    {
+        $db = get_db();
+        $html = '';
+
+        if ($pageId === null) {
+            $page = get_current_record('simple_pages_page', false);
+        } else {
+            $page = $db->getTable('SimplePagesPage')->find($pageId);
+        }
+
+        if ($page) {
+            $ancestorPages = $db->getTable('SimplePagesPage')->findAncestorPages($page->id);
+            $bPages = array_merge(array($page), $ancestorPages);
+
+            // make sure all of the ancestors and the current page are published
+            foreach ($bPages as $bPage) {
+                if (!$bPage->is_published) {
+                    $html = '';
+                    return $html;
+                }
+            }
+
+            $current_lang = substr(getLanguageForOmekaSwitch(), 0, 2);
+
+            // find the page links
+            $pageLinks = array();
+            foreach ($bPages as $bPage) {
+
+                // We try to get a title translation
+                $resQueryTitle = $db->query("SELECT text FROM `$db->TranslationRecords` WHERE record_type LIKE 'SimplePageTitle' AND lang = '" . $current_lang . "' AND record_id = '" . $bPage->id . "'")->fetch();
+                $pageTitle = $resQueryTitle['text'];
+                // If no title translation, we use the original title
+                if (!$pageTitle) {
+                    $pageTitle = $bPage->title;
+                }
+
+                if ($bPage->id == $page->id) {
+                    if ($includePage) {
+                        $pageLinks[] = html_escape($pageTitle);
+                    }
+                } else {
+                    $pageLinks[] = '<a href="' . public_url($bPage->slug) . '">' . html_escape($pageTitle) . '</a>';
+                }
+
+            }
+            $pageLinks[] = '<a href="' . public_url('') . '">' . __('Home') . '</a>';
+
+            $seperator = '<span class="separator" aria-hidden="true">' . html_escape($seperator) . '</span>';
+
+            // create the bread crumb
+            $html .= implode($seperator, array_reverse($pageLinks));
+        }
+        return $html;
+    }
+
 }
 
 
