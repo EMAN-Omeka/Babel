@@ -92,6 +92,13 @@ echo public_nav_main()->setUlClass('menu-tabs')->render();
 echo BabelPlugin::translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
 ```
 
+or
+
+```php
+    $babel = new BabelPlugin();
+    echo $babel->translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
+```
+
 ## Usage
 
 On each content editing page, for each field entry, instead of the usual textfield, you will see one for each activated language.
