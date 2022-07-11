@@ -1,6 +1,6 @@
 <?php
-$head = array('bodyclass' => 'babel simple-pages browse', 
-              'title' => __('Babel | Simple Pages'));
+$head = array('bodyclass' => 'babel exhibitss browse',
+              'title' => __('Babel | Exhibits'));
 echo head($head);
 echo flash(); 
 ?>
