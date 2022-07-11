@@ -105,6 +105,18 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
   	$this->view->content = $list;
 	}
 
+    public function listExhibitsPagesAction () {
+        $db = get_db();
+        $exhibitsPages = $db->query("SELECT title, id FROM `$db->Exhibits`")->fetchAll();
+        $list = "<ul>";
+        foreach ($exhibitsPages as $i => $page) {
+            $list .= "<li><a href='" . WEB_ROOT . "/admin/babel/exhibit/" . $page['id'] . "' target='_blank'>" . $page['title'] . "</a></li>";
+        }
+        $list .= "</ul>";
+
+        $this->view->content = $list;
+    }
+
 	public function translateSimpleVocabAction() {
   	$form = $this->getSimpleVocabForm();
 		if ($this->_request->isPost()) {

@@ -180,6 +180,17 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   						)
   				)
   		);
+        $router->addRoute(
+            'babel_list_exhibits_pages',
+            new Zend_Controller_Router_Route(
+                'babel/list-exhibits-pages',
+                array(
+                    'module' => 'babel',
+                    'controller'   => 'page',
+                    'action'       => 'list-exhibits-pages',
+                )
+            )
+        );
    		$router->addRoute(
   				'babel_translate_exhibit_page',
   				new Zend_Controller_Router_Route(
