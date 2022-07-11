@@ -1,4 +1,4 @@
-# Babel - Content Translation for Omeka Classic test
+# Babel - Content Translation for Omeka Classic
 
 ## Warning
 
