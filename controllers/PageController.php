@@ -219,7 +219,11 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                             $value = array_values($field);
                             $value = $db->quote($value[0]);
                             if ($value) {
-                                $useHtml = 1;
+                                if ($fieldName == "description") {
+                                    $useHtml = 1;
+                                } else {
+                                    $useHtml = 0;
+                                }
                                 $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $id, 'Exhibit" . ucfirst($fieldName) . "', 0, 0, 0, '$lang', $value, $useHtml)";
                                 $db->query($query);
                             }
@@ -443,16 +447,6 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
             }
             $titleSS->setBelongsTo($titleName);
             $form->addElement($titleSS);
-
-            $html = $form->createElement(
-                'hidden', 'use_tiny_mce_' . $lang,
-                array(
-                    'id' => 'babel-use-tiny-mce-' . $lang,
-                    'class' => 'babel-use-tiny-mce',
-                    'values' => 1,
-                )
-            );
-            $form->addElement($html);
 
             // Corps
             $descriptionSS = new Zend_Form_Element_Textarea('description');
