@@ -212,7 +212,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 $texts = $form->getValues();
                 // Sauvegarde form dans DB
                 $db = get_db();
-                $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type = 'Exhibit' AND record_id = " . $id);
+                $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'Exhibit%' AND record_id = " . $id);
                 foreach ($texts as $fieldName => $translations) {
                     if (is_array($translations)) {
                         foreach ($translations as $lang => $field) {
@@ -432,7 +432,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $form->setName('BabelTranslationSSForm');
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
-            $textName = "text[$lang]";
+            $descriptionName = "text[$lang]";
 
             // Titre
             $titleSS = new Zend_Form_Element_Text('title');
@@ -455,15 +455,15 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
             $form->addElement($html);
 
             // Corps
-            $textSS = new Zend_Form_Element_Textarea('texte');
-            $textSS->setLabel('Text (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
-            $textSS->setName($textName);
+            $descriptionSS = new Zend_Form_Element_Textarea('description');
+            $descriptionSS->setLabel('Text (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
+            $descriptionSS->setName($descriptionName);
             if (isset($values['Text'][$lang])) {
-                $textSS->setValue($values['Text'][$lang]);
+                $descriptionSS->setValue($values['Text'][$lang]);
             }
-            $textSS->setBelongsTo($textName);
-            $textSS->setAttrib('class', 'babel-use-html');
-            $form->addElement($textSS);
+            $descriptionSS->setBelongsTo($descriptionName);
+            $descriptionSS->setAttrib('class', 'babel-use-html');
+            $form->addElement($descriptionSS);
         }
 
         $submit = new Zend_Form_Element_Submit('submit');
