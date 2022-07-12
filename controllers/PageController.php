@@ -213,7 +213,20 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 // Sauvegarde form dans DB
                 $db = get_db();
                 $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type = 'Exhibit' AND record_id = " . $id);
-                $db->query("INSERT INTO `$db->TranslationRecords` VALUES (null, $id, 'Exhibit', 0, 0, 0, 'en', '" . serialize($texts) . "')");
+                foreach ($texts as $fieldName => $translations) {
+                    if (is_array($translations)) {
+                        foreach ($translations as $lang => $field) {
+                            $value = array_values($field);
+                            $value = $db->quote($value[0]);
+                            if ($value) {
+                                $useHtml = 1;
+                                $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $id, 'Exhibit" . ucfirst($fieldName) . "', 0, 0, 0, '$lang', $value, $useHtml)";
+                                $db->query($query);
+                            }
+                        }
+                    }
+                    $useHtml = 0;
+                }
             }
         }
         $this->view->form = $form;
@@ -481,42 +494,97 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         return $form;
     }
 
-        public function getExhibitForm($id)
-        {
-            // Retrieve config for this item type from DB
-            $db = get_db();
-            $ss = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type = 'Exhibit' AND record_id = " . $id)->fetchAll();
-            if ($ss) {
-              $ss = unserialize($ss[0]['text']);
-              $title =  $ss['title'];
-              $body =  $ss['description'];
-             } else {
-              $ss = $db->query("SELECT * FROM `$db->Exhibit` WHERE id = $id")->fetchAll();
-          $ss = $ss[0];
-              $title =  $ss['title'];
-              $body =  $ss['description'];
-            }
+    public function getExhibitForm($id)
+    {
+        // Retrieve config for this item type from DB
+        /*            $db = get_db();
+                    $ss = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type = 'Exhibit' AND record_id = " . $id)->fetchAll();
+                    if ($ss) {
+                      $ss = unserialize($ss[0]['text']);
+                      $title =  $ss['title'];
+                      $body =  $ss['description'];
+                     } else {
+                      $ss = $db->query("SELECT * FROM `$db->Exhibit` WHERE id = $id")->fetchAll();
+                  $ss = $ss[0];
+                      $title =  $ss['title'];
+                      $body =  $ss['description'];
+                    }
 
-            $form = new Zend_Form();
-            $form->setName('BabelTranslationSSForm');
+                    $form = new Zend_Form();
+                    $form->setName('BabelTranslationSSForm');
+
+                    // Titre
+                    $titleSS = new Zend_Form_Element_Text('title');
+                    $titleSS->setLabel('Title');
+                    $titleSS->setValue($title);
+                    $form->addElement($titleSS);
+
+                    // Corps
+                    $textSS = new Zend_Form_Element_TextArea('description');
+                    $textSS->setLabel('Body');
+                    $textSS->setValue($body);
+                    $form->addElement($textSS);
+
+                    $submit = new Zend_Form_Element_Submit('submit');
+                    $submit->setLabel('Save Translation');
+                    $form->addElement($submit);
+
+                    return $form;*/
+        $db = get_db();
+        // Retrieve translations for this page type from DB
+        $translations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type = 'Exhibit' AND record_id = " . $id)->fetchAll();
+        if ($translations) {
+            $values = array();
+            foreach ($translations as $index => $texts) {
+                $fieldName = substr($texts['record_type'], 10);
+                $values[$fieldName][$texts['lang']] = $texts['text'];
+                $values[$fieldName]['html'] = $texts['html'];
+            }
+        }
+
+        $form = new Zend_Form();
+        $form->setName('BabelTranslationSSForm');
+        foreach ($this->languages as $lang) {
+            $titleName = "title[$lang]";
+            $textName = "text[$lang]";
 
             // Titre
             $titleSS = new Zend_Form_Element_Text('title');
-            $titleSS->setLabel('Title');
-            $titleSS->setValue($title);
+            $titleSS->setLabel('Title (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
+            $titleSS->setName($titleName);
+            if (isset($values['Title'][$lang])) {
+                $titleSS->setValue($values['Title'][$lang]);
+            }
+            $titleSS->setBelongsTo($titleName);
             $form->addElement($titleSS);
 
+            $html = $form->createElement(
+                'hidden', 'use_tiny_mce_' . $lang,
+                array(
+                    'id' => 'babel-use-tiny-mce-' . $lang,
+                    'class' => 'babel-use-tiny-mce',
+                    'values' => 1,
+                )
+            );
+            $form->addElement($html);
+
             // Corps
-            $textSS = new Zend_Form_Element_TextArea('description');
-            $textSS->setLabel('Body');
-            $textSS->setValue($body);
+            $textSS = new Zend_Form_Element_Textarea('texte');
+            $textSS->setLabel('Text (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
+            $textSS->setName($textName);
+            if (isset($values['Text'][$lang])) {
+                $textSS->setValue($values['Text'][$lang]);
+            }
+            $textSS->setBelongsTo($textName);
+            $textSS->setAttrib('class', 'babel-use-html');
             $form->addElement($textSS);
+        }
 
-            $submit = new Zend_Form_Element_Submit('submit');
-            $submit->setLabel('Save Translation');
-            $form->addElement($submit);
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('Save Translation');
+        $form->addElement($submit);
 
-            return $form;
-      }
+        return $form;
+    }
 
 }
