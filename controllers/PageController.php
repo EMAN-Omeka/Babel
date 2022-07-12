@@ -448,6 +448,16 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
             $titleSS->setBelongsTo($titleName);
             $form->addElement($titleSS);
 
+            $html = $form->createElement(
+                'hidden', 'use_tiny_mce_' . $lang,
+                array(
+                    'id' => 'babel-use-tiny-mce-' . $lang,
+                    'class' => 'babel-use-tiny-mce',
+                    'values' => 1,
+                )
+            );
+            $form->addElement($html);
+
             // Corps
             $descriptionSS = new Zend_Form_Element_Textarea('description');
             $descriptionSS->setLabel('Description (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');

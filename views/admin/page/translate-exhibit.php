@@ -39,7 +39,7 @@ echo flash();
 
         $('.babel-use-tiny-mce').each(function (e, val) {
             var el = $(this).attr('id');
-            var textareaId = 'text-' + el.slice(-2) + '-text' + el.slice(-2);
+            var textareaId = 'description-' + el.slice(-2) + '-description' + el.slice(-2);
             tinyMCE.EditorManager.execCommand("mceAddEditor", false, textareaId);
         });
     });
