@@ -432,7 +432,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $form->setName('BabelTranslationSSForm');
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
-            $descriptionName = "text[$lang]";
+            $descriptionName = "description[$lang]";
 
             // Titre
             $titleSS = new Zend_Form_Element_Text('title');
@@ -456,10 +456,10 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
 
             // Corps
             $descriptionSS = new Zend_Form_Element_Textarea('description');
-            $descriptionSS->setLabel('Text (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
+            $descriptionSS->setLabel('Description (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
             $descriptionSS->setName($descriptionName);
-            if (isset($values['Text'][$lang])) {
-                $descriptionSS->setValue($values['Text'][$lang]);
+            if (isset($values['Description'][$lang])) {
+                $descriptionSS->setValue($values['Description'][$lang]);
             }
             $descriptionSS->setBelongsTo($descriptionName);
             $descriptionSS->setAttrib('class', 'babel-use-html');
