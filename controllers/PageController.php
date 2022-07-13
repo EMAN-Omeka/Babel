@@ -318,6 +318,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
 
         $form = new Zend_Form();
         $form->setName('BabelTranslationSSForm');
+
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
             $textName = "text[$lang]";
@@ -426,11 +427,11 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
     {
         $db = get_db();
         // Retrieve translations for this page type from DB
-        $translations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type = 'Exhibit' AND record_id = " . $id)->fetchAll();
+        $translations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'Exhibit%' AND record_id = " . $id)->fetchAll();
         if ($translations) {
             $values = array();
             foreach ($translations as $index => $texts) {
-                $fieldName = substr($texts['record_type'], 10);
+                $fieldName = substr($texts['record_type'], 7);
                 $values[$fieldName][$texts['lang']] = $texts['text'];
                 $values[$fieldName]['html'] = $texts['html'];
             }
