@@ -233,7 +233,11 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 }
             }
         }
-        $this->view->form = $form;
+        // Retrieve orignal texts from DB
+        $db = get_db();
+        $original = $db->query("SELECT * FROM `$db->Exhibits` WHERE id = " . $id)->fetchAll();
+        $original = "<details><summary>Original texts</summary><div><em>Title</em> : " . $original[0]['title'] . "<br /><br /><em>Credits</em> : " . $original[0]['credits'] . "<br /><br /><em>Description</em> : " . $original[0]['description'] . "</div></details>";
+        $this->view->form = $original . $form;
     }
 
 
