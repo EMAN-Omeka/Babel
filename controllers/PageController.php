@@ -436,6 +436,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $form->setName('BabelTranslationSSForm');
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
+            $creditsName = "credits[$lang]";
             $descriptionName = "description[$lang]";
 
             // Titre
@@ -447,6 +448,16 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
             }
             $titleSS->setBelongsTo($titleName);
             $form->addElement($titleSS);
+
+            // Credits
+            $creditsSS = new Zend_Form_Element_Text('credits');
+            $creditsSS->setLabel('Credits (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
+            $creditsSS->setName($creditsName);
+            if (isset($values['Credits'][$lang])) {
+                $creditsSS->setValue($values['Credits'][$lang]);
+            }
+            $creditsSS->setBelongsTo($creditsName);
+            $form->addElement($creditsSS);
 
             $html = $form->createElement(
                 'hidden', 'use_tiny_mce_' . $lang,
