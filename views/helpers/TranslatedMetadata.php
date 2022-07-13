@@ -122,6 +122,21 @@ class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
           } else {
             return $text;
           }
+        } else if (get_class($record) == 'Exhibit'){ // Simple Page (ou Exhibit ?)
+            $db = get_db();
+            $query = "SELECT text FROM `$db->TranslationRecord` WHERE
+                    lang = '$this->current_language' AND
+                    element_id = 0 AND
+                    record_id = $record->id AND
+                    element_number = 0 AND
+                    record_type = 'Exhibit" . ucfirst($metadata) . "'";
+            if ($translations = $db->query($query)->fetchAll()) {
+                if (isset($translations[0])) {
+                    return $translations[0]['text'];
+                }
+            } else {
+                return $text;
+            }
         }
 
         // If we get here, we're working with a single value only.
