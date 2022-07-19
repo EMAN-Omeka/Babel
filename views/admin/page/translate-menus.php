@@ -7,9 +7,6 @@ echo flash();
 ?>
 <nav id="section-nav" class="navigation vertical">
 <ul class="dropdown">
-  <li>
-    <a href='<?php echo WEB_ROOT; ?>/admin/babel/help'>Fonctionnement du plugin</a>
-  </li>
   <li class='active'>
     <a href='<?php echo WEB_ROOT; ?>/admin/babel/menus'>Menus</a>
   </li>

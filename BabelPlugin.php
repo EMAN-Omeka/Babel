@@ -52,7 +52,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
     {
       $nav[] = array(
                       'label' => __('Babel'),
-                      'uri' => url('babel/help'),
+                      'uri' => url('babel/menus'),
       								'resource' => 'Babel_Page',
                     );
       return $nav;
@@ -82,10 +82,9 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
 
       foreach ($elements as $i => $element) {
         // Pour saisie
-  //         add_filter(array('ElementInput', 'Item', $elementSet->name, $element->name), array($this, 'filterElementInput'));
         add_filter(array('ElementInput', 'Item', $element['esName'], $element['eName']), array($this, 'translateField'), 1000);
-        add_filter(array('ElementInput', 'Collection', $element['esName'], $element['eName']), array($this, 'translateField'), 0);
-        add_filter(array('ElementInput', 'File', $element['esName'], $element['eName']), array($this, 'translateField'), 0);
+        add_filter(array('ElementInput', 'Collection', $element['esName'], $element['eName']), array($this, 'translateField'), 1000);
+        add_filter(array('ElementInput', 'File', $element['esName'], $element['eName']), array($this, 'translateField'), 1000);
       };
     }
 
@@ -112,17 +111,6 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   function hookDefineRoutes($args)
     {
   		$router = $args['router'];
-   		$router->addRoute(
-  				'babel_help',
-  				new Zend_Controller_Router_Route(
-  						'babel/help',
-  						array(
-  								'module' => 'babel',
-  								'controller'   => 'page',
-  								'action'       => 'help',
-  						)
-  				)
-  		);
    		$router->addRoute(
   				'babel_translate_menus',
   				new Zend_Controller_Router_Route(
@@ -234,7 +222,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
       $type = get_class($record);
       $db = get_db();
       $db->query("DELETE FROM `$db->TranslationRecord` WHERE record_id = $record->id AND record_type = '$type'");
-      foreach ($data['Elements'] as $id => $elementGroup) {
+      foreach ($elements as $id => $elementGroup) {
         foreach ($elementGroup as $elementNumber => $element) {
           foreach ($element['translation'] as $lang => $translation) {
             $isHtml = 0;
@@ -315,6 +303,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
               trim($content) == trim($translation) ? $selected = 'selected' : $selected = '';
               $options .= "<option $selected>" . $translation . "</option>";
             }
+            $options = "<option value=''>" . __('Select Below') . "</option>" . $options;
           }
           $components['input'] .= "<span style='font-style:italic;clear:left;display:block;'>" . $langDisplay . "</span><select name='" . $elementId . "' id='" . $elementId . "'>$options</select>";
         }
@@ -355,6 +344,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   public function translate($string) {
     $strings = unserialize(base64_decode(get_option('babel_terms_translations')));
     $translations = [];
+    if (! is_array($strings)) : return $string; endif;
     foreach(array_values($strings) as $group) {
       foreach ($group as $index => $value) {
         $translations[$index] = $value;

@@ -204,9 +204,10 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
 		// Retrieve translations for this page type from DB
 		$translatedTerms = $db->query("SELECT t.element_id id, t.terms terms, e.name name, tr.text trans, tr.lang lang
 		                     FROM `$db->SimpleVocabTerms` t
-		                      LEFT JOIN `$db->Elements` e ON e.id = t.element_id
-		                      LEFT JOIN `$db->TranslationRecords` tr ON tr.element_id = t.element_id")->fetchAll();
+		                     LEFT JOIN `$db->Elements` e ON t.element_id = e.id
+		                     LEFT JOIN `$db->TranslationRecords` tr ON t.element_id = tr.element_id AND tr.record_type = 'SimpleVocab'")->fetchAll();
 
+//     $originalTerms = $db->query("SELECT * FROM `$db->
 		$form = new Zend_Form();
 		$form->setName('BabelTranslationSVForm');
 		// TODO : Synchro $terms / form
@@ -216,7 +217,6 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
       $terms[$term['id']]['terms'] = $term['terms'];
   		$terms[$term['id']][$term['lang']] = $term['trans'];
 		}
-// 		Zend_Debug::dump($terms);
     foreach ($terms as $id => $term) {
   		// Element
  			$original = new Zend_Form_Element_Note('ElementName_' . $id);
