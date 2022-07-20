@@ -126,7 +126,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
 
     public function translateTagsAction()
     {
-        $form = $this->getSimpleVocabForm();
+        $form = $this->getTagsForm();
         if ($this->_request->isPost()) {
             $formData = $this->_request->getPost();
             if ($form->isValid($formData)) {
@@ -314,6 +314,69 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 $form->addElement($textTerm);
             }
         }
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('Save Translation');
+        $submit->setValue('');
+        $form->addElement($submit);
+
+        $form = $this->prettifyForm($form);
+        return $form;
+    }
+
+    public function getTagsForm()
+    {
+        $db = get_db();
+        // Retrieve translations for tags from DB
+        $translations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'Tag'")->fetchAll();
+
+        $form = new Zend_Form();
+        $form->setName('BabelTranslationSVForm');
+        // TODO : Synchro $terms / form
+        $tagsTranslated = [];
+        foreach ($translations as $i => $tagTranslated) {
+            $tagsTranslated[$tagTranslated['id']]['text'] = $tagTranslated['text'];
+            $tagsTranslated[$tagTranslated['id']]['record_id'] = $tagTranslated['record_id'];
+            $tagsTranslated[$tagTranslated['id']][$tagTranslated['lang']] = $tagTranslated['lang'];
+        }
+
+        $originalTags = get_records('Tag', array('sort_field' => 'name', 'sort_dir' => 'a'), 1000000);
+        echo"<div style='float:right;text-align:right;'>wwwww";
+        Zend_Debug::dump($tagsTranslated);
+        Zend_Debug::dump($originalTags);
+        echo"</div>";
+/*        foreach ($tags as $id => $tag) {
+            // Element
+            $original = get_records('Tag', array('sort_field' => 'time', 'sort_dir' => 'd'), $limit);;
+            $original->setValue("<h3>" . __($term['name']) . "</h3>");
+            $form->addElement($original);
+            $default_language = ucfirst(Locale::getDisplayLanguage(get_option('locale_lang_code'), Zend_Registry::get('Zend_Locale')));
+            foreach ($this->languages as $lang) {
+                $language = new Zend_Form_Element_Hidden('lang_' . $id . '_' . $lang);
+                $language->setValue($lang);
+                $language->setBelongsto($id);
+                $form->addElement($language);
+
+                // Original
+                $original = new Zend_Form_Element_Note('OriginalTerm_' . $id);
+                $original->setValue(nl2br($term['terms']) . '<br /><br />');
+                $original->setLabel($default_language);
+                $original->setBelongsto($id);
+                $form->addElement($original);
+
+                // Corps
+                $lines = substr_count($term['terms'], PHP_EOL) + 1;
+                $textTerm = new Zend_Form_Element_Textarea('texte');
+                $textTerm->setAttrib('rows', $lines);
+                $textTerm->setLabel(ucfirst(Locale::getDisplayLanguage($lang, $this->current_language)));
+                $textTerm->setName('ElementNameTranslation_' . $id . '_' . $lang);
+                if (isset($term[$lang]) && $term[$lang] <> '') {
+                    $textTerm->setValue($term[$lang]);
+                }
+                $textTerm->setBelongsto($id);
+                $form->addElement($textTerm);
+            }
+        }*/
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('Save Translation');

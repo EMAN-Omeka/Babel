@@ -32,6 +32,6 @@ echo flash();
     </nav>
     <h2>Saisissez les traductions des mots clés ou tags</h2>
 <?php
-//echo $form;
+echo $form;
 echo foot();
 ?>
