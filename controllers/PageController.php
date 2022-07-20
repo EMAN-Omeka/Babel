@@ -124,6 +124,28 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $this->view->content = $list;
     }
 
+    public function translateTagsAction()
+    {
+        $form = $this->getSimpleVocabForm();
+        if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+                $texts = $form->getValues();
+                // Sauvegarde form dans DB
+                $db = get_db();
+                $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'SimpleVocab'");
+                foreach ($this->languages as $lang) {
+                    foreach ($texts as $element_id => $translations) {
+//             Zend_Debug::dump($translations);
+                        $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'SimpleVocab', 0, $element_id, 0, '" . $translations['lang_' . $element_id . '_' . $lang] . "', " . $db->quote($translations['ElementNameTranslation_' . $element_id . '_' . $lang]) . ", 0)";
+                        $db->query($query);
+                    }
+                }
+            }
+        }
+        $this->view->form = $form;
+    }
+
     public function translateSimpleVocabAction()
     {
         $form = $this->getSimpleVocabForm();

@@ -210,7 +210,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
                 array(
                     'module' => 'babel',
                     'controller'   => 'page',
-                    'action'       => 'translate-simple-vocab',
+                    'action'       => 'translate-tags',
                     'id' => '',
                 )
             )
