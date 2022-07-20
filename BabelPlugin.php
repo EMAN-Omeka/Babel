@@ -203,6 +203,18 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   						)
   				)
   		);
+        $router->addRoute(
+            'babel_translate_tags',
+            new Zend_Controller_Router_Route(
+                'babel/tags',
+                array(
+                    'module' => 'babel',
+                    'controller'   => 'page',
+                    'action'       => 'translate-simple-vocab',
+                    'id' => '',
+                )
+            )
+        );
     }
 
     public function hookAfterSaveFile($args) {

@@ -10,7 +10,7 @@ echo flash();
             <li>
                 <a href='<?php echo WEB_ROOT; ?>/admin/babel/help'>Fonctionnement du plugin</a>
             </li>
-            <li class='active'>
+            <li>
                 <a href='<?php echo WEB_ROOT; ?>/admin/babel/menus'>Menus</a>
             </li>
             <li>
@@ -25,18 +25,13 @@ echo flash();
             <li>
                 <a href='<?php echo WEB_ROOT; ?>/admin/babel/list-exhibits-pages'>Expositions</a>
             </li>
-            <li>
+            <li class='active'>
                 <a href='<?php echo WEB_ROOT; ?>/admin/babel/tags'>Tags</a>
             </li>
         </ul>
     </nav>
-    <h2>Saisissez les traductions des éléments de menus</h2>
-    <style>
-        h4 {
-            margin: 0;
-        }
-    </style>
+    <h2>Saisissez les traductions des mots clés ou tags</h2>
 <?php
-echo $form;
+//echo $form;
 echo foot();
 ?>
