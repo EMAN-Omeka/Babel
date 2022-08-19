@@ -131,17 +131,19 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
             $formData = $this->_request->getPost();
             if ($form->isValid($formData)) {
                 $texts = $form->getValues();
-/*                echo"<div style='float:right;text-align:right;'>";
-                Zend_Debug::dump($texts);
-                echo"</div>";
-                die();*/
+                /*                echo"<div style='float:right;text-align:right;'>";
+                                Zend_Debug::dump($texts);
+                                echo"</div>";
+                                die();*/
                 // Sauvegarde form dans DB
                 $db = get_db();
                 $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'Tag'");
                 foreach ($this->languages as $lang) {
                     foreach ($texts as $element_id => $translations) {
-                        $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Tag', 0, 0, 0, '$lang', " . $db->quote($translations['TagTranslation_' . $element_id . '_' . $lang]) . ", 0)";
-                        $db->query($query);
+                        if ($translations['TagTranslation_' . $element_id . '_' . $lang] != '') {
+                            $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Tag', 0, 0, 0, '$lang', " . $db->quote($translations['TagTranslation_' . $element_id . '_' . $lang]) . ", 0)";
+                            $db->query($query);
+                        }
                     }
                 }
             }
@@ -338,23 +340,22 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         if ($translations) {
             $tagsTranslated = [];
             foreach ($translations as $index => $tagTranslated) {
-                $tagsTranslated[$tagTranslated['record_id']."-".$tagTranslated['lang']]['text'] = $tagTranslated['text'];
-                $tagsTranslated[$tagTranslated['record_id']."-".$tagTranslated['lang']]['record_id'] = $tagTranslated['record_id'];
-                $tagsTranslated[$tagTranslated['record_id']."-".$tagTranslated['lang']]['lang'] = $tagTranslated['lang'];
+                $tagsTranslated[$tagTranslated['record_id'] . "-" . $tagTranslated['lang']]['text'] = $tagTranslated['text'];
+                $tagsTranslated[$tagTranslated['record_id'] . "-" . $tagTranslated['lang']]['record_id'] = $tagTranslated['record_id'];
+                $tagsTranslated[$tagTranslated['record_id'] . "-" . $tagTranslated['lang']]['lang'] = $tagTranslated['lang'];
             }
         }
 
         $originalTags = get_records('Tag', array('sort_field' => 'name', 'sort_dir' => 'a'), 1000000);
-/*        echo"<div style='float:right;text-align:right;width:100%;'>";
-        Zend_Debug::dump($tagsTranslated);
-        Zend_Debug::dump($originalTags);
-        echo"</div>";*/
+        /*        echo"<div style='float:right;text-align:right;width:100%;'>";
+                Zend_Debug::dump($tagsTranslated);
+                Zend_Debug::dump($originalTags);
+                echo"</div>";*/
         foreach ($originalTags as $tag) {
 
 
-
             foreach ($this->languages as $lang) {
-                $id=$tag->id;
+                $id = $tag->id;
                 $name = $tag->name;
                 $original = new Zend_Form_Element_Note('OriginalTag_' . $tag->id);
 
@@ -367,17 +368,17 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 $textTag->setAttrib('rows', 1);
                 $textTag->setLabel(ucfirst(Locale::getDisplayLanguage($lang, $this->current_language)));
                 $textTag->setName('TagTranslation_' . $id . '_' . $lang);
-/*                echo"<div style='float:right;text-align:right;width:100%;'>";
-                Zend_Debug::dump('xxxx');
-                echo"</div>";
-                echo"<div style='float:right;text-align:right;width:100%;'>";
-                Zend_Debug::dump($tagsTranslated[171]);
-                echo"</div>";*/
-                if ($tagsTranslated[$id."-".$lang]['text'] != '') {
-/*                    echo"<div style='float:right;text-align:right;width:100%;'>";
-                    Zend_Debug::dump('YYYYEEEAAAHHHH');
-                    echo"</div>";*/
-                    $textTag->setValue($tagsTranslated[$id."-".$lang]['text']);
+                /*                echo"<div style='float:right;text-align:right;width:100%;'>";
+                                Zend_Debug::dump('xxxx');
+                                echo"</div>";
+                                echo"<div style='float:right;text-align:right;width:100%;'>";
+                                Zend_Debug::dump($tagsTranslated[171]);
+                                echo"</div>";*/
+                if ($tagsTranslated[$id . "-" . $lang]['text'] != '') {
+                    /*                    echo"<div style='float:right;text-align:right;width:100%;'>";
+                                        Zend_Debug::dump('YYYYEEEAAAHHHH');
+                                        echo"</div>";*/
+                    $textTag->setValue($tagsTranslated[$id . "-" . $lang]['text']);
                 }
                 $textTag->setBelongsto($id);
                 $form->addElement($textTag);
