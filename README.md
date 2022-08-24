@@ -227,6 +227,3 @@ Once an element is translated, the plugin detects the current language and displ
 ## Credits
 
 Plugin coded for the EMAN platform (Item, ENS-CNRS) by Vincent Buard [(Numerizen)](http://numerizen.com).
-
-testxxx
-
