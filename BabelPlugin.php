@@ -204,6 +204,18 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
   				)
   		);
         $router->addRoute(
+            'babel_translate_exhibit_page_page',
+            new Zend_Controller_Router_Route(
+                'babel/exhibit/page/:id',
+                array(
+                    'module' => 'babel',
+                    'controller'   => 'page',
+                    'action'       => 'translate-exhibit-page',
+                    'id' => '',
+                )
+            )
+        );
+        $router->addRoute(
             'babel_translate_tags',
             new Zend_Controller_Router_Route(
                 'babel/tags',

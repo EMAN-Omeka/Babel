@@ -273,6 +273,15 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $this->view->form = $original . $form;
     }
 
+    public function translateExhibitPageAction()
+    {
+        $id = $this->getParam('id');
+
+        $original = "original";
+        $form = "formulaire";
+        $this->view->form = $original . $form;
+    }
+
 
     public function getSimpleVocabForm()
     {
