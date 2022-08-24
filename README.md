@@ -158,3 +158,5 @@ Once an element is translated, the plugin detects the current language and displ
 
 Plugin coded for the EMAN platform (Item, ENS-CNRS) by Vincent Buard [(Numerizen)](http://numerizen.com).
 
+test
+
