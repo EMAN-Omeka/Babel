@@ -118,6 +118,12 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $list = "<ul>";
         foreach ($exhibits as $i => $exhibit) {
             $list .= "<li><a href='" . WEB_ROOT . "/admin/babel/exhibit/" . $exhibit['id'] . "' target='_blank'>" . $exhibit['title'] . "</a></li>";
+            $exhibitPages = $db->getTable("ExhibitPage")->findBy(array('exhibit_id' => $exhibit['id'], 'sort_field' => 'order'));
+            $list .= "<ul>";
+            foreach ($exhibitPages as $ii => $exhibitPage) {
+                $list .= "<li><a href='" . WEB_ROOT . "/admin/babel/exhibit/page/" . $exhibitPage['id'] . "' target='_blank'>" . $exhibitPage['title'] . "</a></li>";
+            }
+            $list .= "</ul>";
         }
         $list .= "</ul>";
 
