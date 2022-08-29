@@ -276,9 +276,36 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
     public function translateExhibitPageAction()
     {
         $id = $this->getParam('id');
+        $form = $this->getExhibitPageForm($id);
 
-        $original = "original";
-        $form = "formulaire";
+        if ($this->_request->isPost()) {
+            $formData = $this->_request->getPost();
+            if ($form->isValid($formData)) {
+                $texts = $form->getValues();
+                // Sauvegarde form dans DB
+                $db = get_db();
+                $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'PageExhibit%' AND record_id = " . $id);
+                $useHtml = 0;
+                foreach ($texts as $fieldName => $translations) {
+                    if (is_array($translations)) {
+                        foreach ($translations as $lang => $field) {
+                            $value = array_values($field);
+                            if ($value[0]) {
+                                $value = $db->quote($value[0]);
+                                $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $id, 'PageExhibit" . ucfirst($fieldName) . "', 0, 0, 0, '$lang', $value, $useHtml)";
+                                $db->query($query);
+                            }
+                        }
+                    }
+                    $useHtml = 0;
+                }
+            }
+        }
+
+        // Retrieve orignal texts from DB
+        $db = get_db();
+        $original = $db->query("SELECT * FROM `$db->ExhibitPages` WHERE id = " . $id)->fetchAll();
+        $original = "<details><summary>Original texts</summary><div><em>Title</em> : " . $original[0]['title'] . "<br /><br /><em>Short title</em> : " . $original[0]['short_title'] . "</div></details>";
         $this->view->form = $original . $form;
     }
 
@@ -598,6 +625,46 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $form->addElement($submit);
 
         return $form;
+    }
+
+    public function getExhibitPageForm($id)
+    {
+
+        $db = get_db();
+        // Retrieve translations for this page type from DB
+        $translations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'PageExhibit%' AND record_id = " . $id)->fetchAll();
+        if ($translations) {
+            $values = array();
+            foreach ($translations as $index => $texts) {
+                $fieldName = substr($texts['record_type'], 11);
+                $values[$fieldName][$texts['lang']] = $texts['text'];
+                $values[$fieldName]['html'] = $texts['html'];
+            }
+        }
+
+        $form = new Zend_Form();
+        $form->setName('BabelTranslationSSForm');
+        foreach ($this->languages as $lang) {
+            $titleName = "title[$lang]";
+            $shortTitleName = "shorttitle[$lang]";
+
+            // Titre
+            $titleSS = new Zend_Form_Element_Text('title');
+            $titleSS->setLabel('Title (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
+            $titleSS->setName($titleName);
+            if (isset($values['Title'][$lang])) {
+                $titleSS->setValue($values['Title'][$lang]);
+            }
+            $titleSS->setBelongsTo($titleName);
+            $form->addElement($titleSS);
+        }
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('Save Translation');
+        $form->addElement($submit);
+
+        return $form;
+
     }
 
     private function prettifyForm2($form)
