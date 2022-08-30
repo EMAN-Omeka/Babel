@@ -34,10 +34,8 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'Menu'");
                 foreach ($this->languages as $lang) {
                     foreach ($texts as $element_id => $translations) {
-                        if ($translations['ElementMenuTranslation_' . $element_id . '_' . $lang] != "") {
                             $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Menu', 0, $element_id, 0, '" . substr($translations['lang_' . $element_id . '_' . $lang], 0, 2) . "', " . $db->quote($translations['ElementMenuTranslation_' . $element_id . '_' . $lang]) . ", 0)";
                             $db->query($query);
-                        }
                     }
                 }
             }

@@ -431,7 +431,7 @@ class BabelPlugin extends Omeka_Plugin_AbstractPlugin
             if (strpos($text, "\n")) {
                 $text = substr($text, 0, strpos($text, "\n"));
             }
-            $originals[] = $text;
+            $originals[$i] = $text;
         }
         unset($dom);
         $db = get_db();
