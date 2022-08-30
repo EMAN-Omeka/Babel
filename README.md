@@ -163,7 +163,27 @@ instead of
 ```php
 <?php echo simple_pages_display_breadcrumbs(); ?>
 ```
+We have also implemented a methode "exhibit_builder_link_to_translate" to replace the function "exhibit_builder_link_to". To use it, you have to :
 
+put 
+
+```php
+<?php
+$babel = new BabelPlugin();
+?>
+```
+
+at the top of the file and
+
+```php
+<?php echo $babel->exhibit_builder_link_to_translate($exhibit); ?>
+```
+
+instead of
+
+```php
+<?php echo exhibit_builder_link_to($exhibit); ?>
+```
 #### Menus
 
 Menus translation is a bit tricky, because it depends on how yours are set up in your theme.
