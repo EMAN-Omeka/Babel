@@ -646,7 +646,7 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
         $form->setName('BabelTranslationSSForm');
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
-            $shortTitleName = "shortTitle[$lang]";
+            $shortTitleName = "menu_title[$lang]";
 
             // Title
             $titleSS = new Zend_Form_Element_Text('title');
@@ -659,11 +659,11 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
             $form->addElement($titleSS);
 
             // Short Title
-            $shorttitleSS = new Zend_Form_Element_Text('shorttitle');
+            $shorttitleSS = new Zend_Form_Element_Text('menu_title');
             $shorttitleSS->setLabel('Short Title (' . Locale::getDisplayLanguage($lang, $this->current_language) . ')');
             $shorttitleSS->setName($shortTitleName);
-            if (isset($values['ShortTitle'][$lang])) {
-                $shorttitleSS->setValue($values['ShortTitle'][$lang]);
+            if (isset($values['Menu_title'][$lang])) {
+                $shorttitleSS->setValue($values['Menu_title'][$lang]);
             }
             $shorttitleSS->setBelongsTo($shortTitleName);
             $form->addElement($shorttitleSS);
