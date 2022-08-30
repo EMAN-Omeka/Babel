@@ -249,9 +249,9 @@ class Babel_PageController extends Omeka_Controller_AbstractActionController
                 foreach ($texts as $fieldName => $translations) {
                     if (is_array($translations)) {
                         foreach ($translations as $lang => $field) {
-                            $value = array_values($field);
-                            $value = $db->quote($value[0]);
-                            if ($value) {
+                            $valueN = array_values($field);
+                            $value = $db->quote($valueN[0]);
+                            if ($valueN[0] !="") {
                                 if ($fieldName == "description") {
                                     $useHtml = 1;
                                 } else {
