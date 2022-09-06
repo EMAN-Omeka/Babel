@@ -1,6 +1,6 @@
 <?php
 
-class Babel_PageController extends Omeka_Controller_AbstractActionController
+class Babela_PageController extends Omeka_Controller_AbstractActionController
 {
     public function init()
     {
