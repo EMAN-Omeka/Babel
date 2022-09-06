@@ -1,7 +1,7 @@
 <?php
 queue_js_file('vendor/tinymce/tinymce.min');
-$head = array('bodyclass' => 'babel primary browse',
-              'title' => __('Babel | Translate Simple Page'));
+$head = array('bodyclass' => 'babela primary browse',
+              'title' => __('Babela | Translate Simple Page'));
 echo head($head);
 echo flash();
 ?>

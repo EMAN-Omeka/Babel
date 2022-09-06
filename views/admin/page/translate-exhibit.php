@@ -1,6 +1,6 @@
 <?php
 queue_js_file('vendor/tinymce/tinymce.min');
-$head = array('title' => 'Translate Exhibit', 'bodyclass' => 'babel primary translation');
+$head = array('title' => 'Translate Exhibit', 'bodyclass' => 'babela primary translation');
 echo head($head);
 echo flash();
 ?>

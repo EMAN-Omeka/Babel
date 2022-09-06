@@ -1,5 +1,5 @@
 <?php
-$head = array('title' => 'Translate Exhibit Page', 'bodyclass' => 'babel primary translation');
+$head = array('title' => 'Translate Exhibit Page', 'bodyclass' => 'babela primary translation');
 echo head($head);
 echo flash();
 ?>
