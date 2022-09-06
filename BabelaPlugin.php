@@ -40,8 +40,8 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
     function hookDefineAcl($args)
     {
         $acl = $args['acl'];
-        $babelAdmin = new Zend_Acl_Resource('Babel_Page');
-        $acl->add($babelAdmin);
+        $babelaAdmin = new Zend_Acl_Resource('Babela_Page');
+        $acl->add($babelaAdmin);
     }
 
     /**
@@ -53,9 +53,9 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
     public function filterAdminNavigationMain($nav)
     {
         $nav[] = array(
-            'label' => __('Babel'),
-            'uri' => url('babel/help'),
-            'resource' => 'Babel_Page',
+            'label' => __('Babela'),
+            'uri' => url('babela/help'),
+            'resource' => 'Babela_Page',
         );
         return $nav;
     }
