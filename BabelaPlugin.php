@@ -33,7 +33,7 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
         $url = $_SERVER['REQUEST_URI'];
         preg_match('@^\/admin\/(items|collections|files)\/edit/@', $url, $matches);
         if ($matches) {
-            queue_js_file('babel');
+            queue_js_file('babela');
         }
     }
 
