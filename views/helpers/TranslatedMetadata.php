@@ -11,7 +11,7 @@
  *
  * @package Omeka\View\Helper
  */
-class Babel_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
+class Babela_View_Helper_TranslatedMetadata extends Zend_View_Helper_Abstract
 {
     const SNIPPET = 'snippet';
     const INDEX = 'index';

@@ -12,7 +12,7 @@
  * 
  * @package Omeka\View\Helper
  */
-class Babel_View_Helper_TranslatedElementTexts extends Zend_View_Helper_Abstract
+class Babela_View_Helper_TranslatedElementTexts extends Zend_View_Helper_Abstract
 {
     const RETURN_HTML = 'html';
     const RETURN_ARRAY = 'array';
