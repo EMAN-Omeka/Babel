@@ -1,5 +1,6 @@
 # Babela - Content Translation for Omeka Classic
-# Babela has as starting poit Babel https://github.com/EMAN-Omeka/Babel
+
+Babela has as starting point Babel https://github.com/EMAN-Omeka/Babel
 
 ## Warning
 
