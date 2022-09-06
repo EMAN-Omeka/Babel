@@ -384,19 +384,19 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $db = $this->_db;
         $db->query("DROP TABLE `$db->TranslationRecord`");
-        delete_option('babel_terms_translations');
+        delete_option('babela_terms_translations');
     }
 
     public function hookPublicItemsShow($args)
     {
         $view = $args['view'];
-        $view->addHelperPath(PLUGIN_DIR . '/Babel/views/helpers', 'Babel_View_Helper_');
+        $view->addHelperPath(PLUGIN_DIR . '/Babela/views/helpers', 'Babela_View_Helper_');
     }
 
     public function translate($string)
     {
-        if (!$strings = unserialize(base64_decode(get_option('babel_terms_translations')))) {
-            include(PLUGIN_DIR . '/Babel/themeStrings.php');
+        if (!$strings = unserialize(base64_decode(get_option('babela_terms_translations')))) {
+            include(PLUGIN_DIR . '/Babela/themeStrings.php');
         }
         $translations = [];
         foreach (array_values($strings) as $group) {
