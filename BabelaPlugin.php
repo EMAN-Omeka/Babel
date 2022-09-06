@@ -7,7 +7,7 @@
  *
  */
 
-class BabelPlugin extends Omeka_Plugin_AbstractPlugin
+class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
 {
     protected $_filters = array(
         'admin_navigation_global',
