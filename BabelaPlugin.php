@@ -115,22 +115,22 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $router = $args['router'];
         $router->addRoute(
-            'babel_help',
+            'babela_help',
             new Zend_Controller_Router_Route(
-                'babel/help',
+                'babela/help',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'help',
                 )
             )
         );
         $router->addRoute(
-            'babel_translate_menus',
+            'babela_translate_menus',
             new Zend_Controller_Router_Route(
-                'babel/menus',
+                'babela/menus',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-menus',
                     'id' => '',
@@ -138,11 +138,11 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
             )
         );
         $router->addRoute(
-            'babel_translate_simple_vocab',
+            'babela_translate_simple_vocab',
             new Zend_Controller_Router_Route(
-                'babel/simple-vocab/:id',
+                'babela/simple-vocab/:id',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-simple-vocab',
                     'id' => '',
@@ -150,11 +150,11 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
             )
         );
         $router->addRoute(
-            'babel_translate_simple_page',
+            'babela_translate_simple_page',
             new Zend_Controller_Router_Route(
-                'babel/simple-page/:id',
+                'babela/simple-page/:id',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-simple-page',
                     'id' => '',
@@ -162,44 +162,44 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
             )
         );
         $router->addRoute(
-            'babel_translate_terms',
+            'babela_translate_terms',
             new Zend_Controller_Router_Route(
-                'babel/terms',
+                'babela/terms',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-terms',
                 )
             )
         );
         $router->addRoute(
-            'babel_list_simple_pages',
+            'babela_list_simple_pages',
             new Zend_Controller_Router_Route(
-                'babel/list-simple-pages',
+                'babela/list-simple-pages',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'list-simple-pages',
                 )
             )
         );
         $router->addRoute(
-            'babel_list_exhibits_pages',
+            'babela_list_exhibits_pages',
             new Zend_Controller_Router_Route(
-                'babel/list-exhibits-pages',
+                'babela/list-exhibits-pages',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'list-exhibits-pages',
                 )
             )
         );
         $router->addRoute(
-            'babel_translate_exhibit_page',
+            'babela_translate_exhibit_page',
             new Zend_Controller_Router_Route(
-                'babel/exhibit/:id',
+                'babela/exhibit/:id',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-exhibit',
                     'id' => '',
@@ -207,11 +207,11 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
             )
         );
         $router->addRoute(
-            'babel_translate_exhibit_page_page',
+            'babela_translate_exhibit_page_page',
             new Zend_Controller_Router_Route(
-                'babel/exhibit/page/:id',
+                'babela/exhibit/page/:id',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-exhibit-page',
                     'id' => '',
@@ -219,11 +219,11 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
             )
         );
         $router->addRoute(
-            'babel_translate_tags',
+            'babela_translate_tags',
             new Zend_Controller_Router_Route(
-                'babel/tags',
+                'babela/tags',
                 array(
-                    'module' => 'babel',
+                    'module' => 'babela',
                     'controller' => 'page',
                     'action' => 'translate-tags',
                     'id' => '',
