@@ -1,4 +1,5 @@
-# Babel - Content Translation for Omeka Classic
+# Babela - Content Translation for Omeka Classic
+# Babela has as starting poit Babel https://github.com/EMAN-Omeka/Babel
 
 ## Warning
 
@@ -11,8 +12,6 @@ Feedback is much appreciated.
 This module aims to provide an elegant way to translate Omeka **content**, as opposed to Omeka interface strings, which are handled via the usual gettext technology.
 
 It provides a hopefully seamless integration of translation features directly into standard Omeka content management forms.
-
-It is designed to work well with our other plugin, [UiTemplates](https://github.com/ENS-ITEM/UiTemplates).
 
 ## Prerequisites
 
@@ -246,4 +245,5 @@ Once an element is translated, the plugin detects the current language and displ
 
 ## Credits
 
-Plugin coded for the EMAN platform (Item, ENS-CNRS) by Vincent Buard [(Numerizen)](http://numerizen.com).
+Based on a plugin coded for the EMAN platform (Item, ENS-CNRS) by Vincent Buard [(Numerizen)](http://numerizen.com).
+Improved by Gilles Lengy for Artaban (https://artaban.fr)
