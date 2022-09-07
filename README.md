@@ -148,14 +148,14 @@ To have the breadcrumb of Simple Pages translated, you have to copy "plugins/Sim
 
 ```php
 <?php
-$babel = new BabelPlugin();
+$babela = new BabelaPlugin();
 ?>
 ```
 
 at the top of the file and
 
 ```php
-<?php echo $babel->simple_pages_display_breadcrumbs_translate(); ?>
+<?php echo $babela->simple_pages_display_breadcrumbs_translate(); ?>
 ```
 
 instead of
@@ -169,14 +169,14 @@ put
 
 ```php
 <?php
-$babel = new BabelPlugin();
+$babela = new BabelaPlugin();
 ?>
 ```
 
 at the top of the file and
 
 ```php
-<?php echo $babel->exhibit_builder_link_to_translate($exhibit); ?>
+<?php echo $babela->exhibit_builder_link_to_translate($exhibit); ?>
 ```
 
 instead of
@@ -199,7 +199,7 @@ echo public_nav_main()->setUlClass('menu-tabs')->render();
 ... you will instead write :
 
 ```php
-echo BabelPlugin::translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
+echo BabelaPlugin::translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
 ```
 
 or
@@ -208,14 +208,14 @@ at the top of your file
 
 ```php
 <?php
-$babel = new BabelPlugin();
+$babela = new BabelaPlugin();
 ?>
 ```
 
 and then
 
 ```php
-    echo $babel->translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
+    echo $babela->translateMenu(public_nav_main()->setUlClass('menu-tabs')->render());
 ```
 
 ## Usage
@@ -227,7 +227,6 @@ Enabling the HTML editor will affect the original field and all the translation 
 The following elements can be translated :
 
 - Items
-- Collections
 - Files
 - Simple Pages
 - Menus
@@ -237,12 +236,9 @@ The following elements are NOT translated, as of now :
 
 - Site's information
 - Exhibits
+- Collections
 
 Once an element is translated, the plugin detects the current language and displays the matching translation if it exists, the default language string if it doesn't.
-
-## Possible upcoming upgrades
-
-- t() learns strings automatically (add them to its dictionary when it's not already there).
 
 ## Credits
 
