@@ -52,7 +52,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
             $translations[$translationRecord['element_id']][$translationRecord['lang']] = $translationRecord['text'];
         }
         $form = new Zend_Form();
-        $form->setName('BabelTranslationMenuForm');
+        $form->setName('BabelaTranslationMenuForm');
 
         $dom = new DOMDocument;
         @$dom->loadHTML('<?xml encoding="utf-8" ?>' . public_nav_main()->setUlClass('auteur-onglets')->render());
@@ -104,7 +104,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
         $simplePages = $db->query("SELECT title, id FROM `$db->SimplePagesPage`")->fetchAll();
         $list = "<ul>";
         foreach ($simplePages as $i => $page) {
-            $list .= "<li><a href='" . WEB_ROOT . "/admin/babel/simple-page/" . $page['id'] . "' target='_blank'>" . $page['title'] . "</a></li>";
+            $list .= "<li><a href='" . WEB_ROOT . "/admin/babela/simple-page/" . $page['id'] . "' target='_blank'>" . $page['title'] . "</a></li>";
         }
         $list .= "</ul>";
 
@@ -117,11 +117,11 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
         $exhibits = $db->query("SELECT title, id FROM `$db->Exhibits`")->fetchAll();
         $list = "<ul>";
         foreach ($exhibits as $i => $exhibit) {
-            $list .= "<li><a href='" . WEB_ROOT . "/admin/babel/exhibit/" . $exhibit['id'] . "' target='_blank'>" . $exhibit['title'] . "</a></li>";
+            $list .= "<li><a href='" . WEB_ROOT . "/admin/babela/exhibit/" . $exhibit['id'] . "' target='_blank'>" . $exhibit['title'] . "</a></li>";
             $exhibitPages = $db->getTable("ExhibitPage")->findBy(array('exhibit_id' => $exhibit['id'], 'sort_field' => 'order'));
             $list .= "<ul>";
             foreach ($exhibitPages as $ii => $exhibitPage) {
-                $list .= "<li><a href='" . WEB_ROOT . "/admin/babel/exhibit/page/" . $exhibitPage['id'] . "' target='_blank'>" . $exhibitPage['title'] . "</a></li>";
+                $list .= "<li><a href='" . WEB_ROOT . "/admin/babela/exhibit/page/" . $exhibitPage['id'] . "' target='_blank'>" . $exhibitPage['title'] . "</a></li>";
             }
             $list .= "</ul>";
         }
@@ -226,7 +226,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
                 if (isset($formData['translations'])) {
                     unset($formData['translations'], $formData['submit']);
                     $translations = base64_encode(serialize($formData));
-                    set_option('babel_terms_translations', $translations);
+                    set_option('babela_terms_translations', $translations);
                     $this->view->form = $form;
                     return true;
                 }
@@ -320,7 +320,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
 		                      LEFT JOIN `$db->TranslationRecords` tr ON tr.element_id = t.element_id")->fetchAll();
 
         $form = new Zend_Form();
-        $form->setName('BabelTranslationSVForm');
+        $form->setName('BabelaTranslationSVForm');
         // TODO : Synchro $terms / form
         $terms = [];
         foreach ($translatedTerms as $i => $term) {
@@ -378,7 +378,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
         $translations = $db->query("SELECT * FROM `$db->TranslationRecords` WHERE record_type LIKE 'Tag'")->fetchAll();
 
         $form = new Zend_Form();
-        $form->setName('BabelTranslationSVForm');
+        $form->setName('BabelaTranslationSVForm');
         if ($translations) {
             $tagsTranslated = [];
             foreach ($translations as $index => $tagTranslated) {
@@ -451,7 +451,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
         }
 
         $form = new Zend_Form();
-        $form->setName('BabelTranslationSSForm');
+        $form->setName('BabelaTranslationSSForm');
 
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
@@ -475,8 +475,8 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
             $html = $form->createElement(
                 'checkbox', 'use_tiny_mce_' . $lang,
                 array(
-                    'id' => 'babel-use-tiny-mce-' . $lang,
-                    'class' => 'babel-use-tiny-mce',
+                    'id' => 'babela-use-tiny-mce-' . $lang,
+                    'class' => 'babela-use-tiny-mce',
                     'checked' => $checked,
                     'values' => array(1, 0),
                     'label' => __('Use HTML editor?'),
@@ -492,7 +492,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
                 $textSS->setValue($values['Text'][$lang]);
             }
             $textSS->setBelongsTo($textName);
-            $textSS->setAttrib('class', 'babel-use-html');
+            $textSS->setAttrib('class', 'babela-use-html');
             $form->addElement($textSS);
         }
 
@@ -505,14 +505,14 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
 
     public function getTranslationsForm()
     {
-        include_once(PLUGIN_DIR . '/Babel/themeStrings.php');
+        include_once(PLUGIN_DIR . '/Babela/themeStrings.php');
         $form = new Zend_Form();
-        $form->setName('BabelTranslationsForm');
+        $form->setName('BabelaTranslationsForm');
 
         $t = new Zend_Form_Element_Hidden('translations');
         $t->setValue(1);
         $form->addElement($t);
-        $translations = get_option('babel_terms_translations');
+        $translations = get_option('babela_terms_translations');
         $translations = unserialize(base64_decode($translations));
         $categoryNumber = 0;
         foreach ($strings as $title => $category) {
@@ -572,7 +572,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
         }
 
         $form = new Zend_Form();
-        $form->setName('BabelTranslationSSForm');
+        $form->setName('BabelaTranslationSSForm');
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
             $creditsName = "credits[$lang]";
@@ -601,8 +601,8 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
             $html = $form->createElement(
                 'hidden', 'use_tiny_mce_' . $lang,
                 array(
-                    'id' => 'babel-use-tiny-mce-' . $lang,
-                    'class' => 'babel-use-tiny-mce',
+                    'id' => 'babela-use-tiny-mce-' . $lang,
+                    'class' => 'babela-use-tiny-mce',
                     'values' => 1,
                 )
             );
@@ -616,7 +616,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
                 $descriptionSS->setValue($values['Description'][$lang]);
             }
             $descriptionSS->setBelongsTo($descriptionName);
-            $descriptionSS->setAttrib('class', 'babel-use-html');
+            $descriptionSS->setAttrib('class', 'babela-use-html');
             $form->addElement($descriptionSS);
         }
 
@@ -643,7 +643,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
         }
 
         $form = new Zend_Form();
-        $form->setName('BabelTranslationSSForm');
+        $form->setName('BabelaTranslationSSForm');
         foreach ($this->languages as $lang) {
             $titleName = "title[$lang]";
             $shortTitleName = "menu_title[$lang]";
