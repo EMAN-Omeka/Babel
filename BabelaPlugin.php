@@ -459,7 +459,7 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
      * @param boolean $includePage Whether to include the title of the current page.
      * @uses public_url(), html_escape()
      */
-    function simple_pages_display_breadcrumbs_translatex($pageId = null, $seperator = ' > ', $includePage = true)
+    function simple_simple_pages_display_breadcrumbs_translate($pageId = null, $seperator = ' > ', $includePage = true)
     {
         $db = get_db();
         $html = '';
