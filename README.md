@@ -232,7 +232,7 @@ The following elements can be translated :
 - Menus
 - Strings echoed in theme files (via the ``t()`` function)
 
-The following elements are NOT translated, as of now :
+The following elements are NOT translated OR NOT FULLY, as of now :
 
 - Site's information
 - Exhibits
