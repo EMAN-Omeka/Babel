@@ -98,13 +98,13 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
             if ($params['module'] == 'simple-pages' && isset($params['id'])) {
                 $nav[] = array(
                     'label' => __('Translate this Simple Page'),
-                    'uri' => url('babel/simple-page/' . $params['id'])
+                    'uri' => url('babela/simple-page/' . $params['id'])
                 );
             }
             if ($params['module'] == 'exhibit-builder' && isset($params['id'])) {
                 $nav[] = array(
                     'label' => __('Translate this Exhibit Page'),
-                    'uri' => url('babel/exhibit/' . $params['id'])
+                    'uri' => url('babela/exhibit/' . $params['id'])
                 );
             }
         }
@@ -140,7 +140,8 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
         $router->addRoute(
             'babela_translate_simple_vocab',
             new Zend_Controller_Router_Route(
-                'babela/simple-vocab/:id',
+                //'babela/simple-vocab/:id',
+                'babela/simple-vocab',
                 array(
                     'module' => 'babela',
                     'controller' => 'page',
