@@ -30,7 +30,7 @@ $(window).on( "load", function() {
         tinymce.init($.extend(initParams));
 */
     Omeka.wysiwyg({
-        selector: 'babel-use-html',
+        selector: 'babela-use-html',
         menubar: 'edit view insert format table',
 //         plugins: 'lists link code paste media autoresize image table charmap hr',
             toolbar: ["bold italic underline strikethrough | sub sup | forecolor backcolor | link | anchor | formatselect code | superscript subscript", "hr | alignleft aligncenter alignright alignjustify | indent outdent | bullist numlist | table | pastetext, pasteword | charmap | media | image"],
@@ -38,7 +38,7 @@ $(window).on( "load", function() {
         browser_spellcheck: true
     });
 
-    $('.babel-use-tiny-mce').each(function(e, val) {
+    $('.babela-use-tiny-mce').each(function(e, val) {
       var el = $(this).attr('id');
       var textareaId = 'text-' + el.slice(-2) + '-text'  + el.slice(-2);
       if ($(this).is(':checked')) {
@@ -49,7 +49,7 @@ $(window).on( "load", function() {
     });
 
     // Add or remove TinyMCE control.
-    $('.babel-use-tiny-mce').on( "click", function() {
+    $('.babela-use-tiny-mce').on( "click", function() {
       var el = $(this).attr('name');
       var textareaId = 'text-' + el.slice(-2) + '-text'  + el.slice(-2);
         if ($(this).is(':checked')) {
