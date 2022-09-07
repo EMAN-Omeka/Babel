@@ -30,7 +30,7 @@ echo flash();
             </li>
         </ul>
     </nav>
-    <h2>Saisissez les traductions des éléments de menus</h2>
+    <h2>Saisissez les traductions des Terms</h2>
 
 <?php
 echo $form;

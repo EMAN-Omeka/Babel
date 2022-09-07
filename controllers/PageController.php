@@ -34,8 +34,8 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
                 $db->query("DELETE FROM `$db->TranslationRecords` WHERE record_type LIKE 'Menu'");
                 foreach ($this->languages as $lang) {
                     foreach ($texts as $element_id => $translations) {
-                            $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Menu', 0, $element_id, 0, '" . substr($translations['lang_' . $element_id . '_' . $lang], 0, 2) . "', " . $db->quote($translations['ElementMenuTranslation_' . $element_id . '_' . $lang]) . ", 0)";
-                            $db->query($query);
+                        $query = "INSERT INTO `$db->TranslationRecords` VALUES (null, $element_id, 'Menu', 0, $element_id, 0, '" . substr($translations['lang_' . $element_id . '_' . $lang], 0, 2) . "', " . $db->quote($translations['ElementMenuTranslation_' . $element_id . '_' . $lang]) . ", 0)";
+                        $db->query($query);
                     }
                 }
             }
@@ -159,7 +159,12 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
 
     public function translateSimpleVocabAction()
     {
-        $form = $this->getSimpleVocabForm();
+        $form=false;
+        if (isset($params['module'])) {
+            if ($params['module'] == 'simple-vocab') {
+                $form = $this->getSimpleVocabForm();
+            }
+        }
         if ($this->_request->isPost()) {
             $formData = $this->_request->getPost();
             if ($form->isValid($formData)) {
@@ -176,7 +181,9 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
                 }
             }
         }
-        $this->view->form = $form;
+        if($form) {
+            $this->view->form = $form;
+        }
     }
 
     public function translateSimplePageAction()
@@ -251,7 +258,7 @@ class Babela_PageController extends Omeka_Controller_AbstractActionController
                         foreach ($translations as $lang => $field) {
                             $valueN = array_values($field);
                             $value = $db->quote($valueN[0]);
-                            if ($valueN[0] !="") {
+                            if ($valueN[0] != "") {
                                 if ($fieldName == "description") {
                                     $useHtml = 1;
                                 } else {

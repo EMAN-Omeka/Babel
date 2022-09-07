@@ -33,6 +33,10 @@ echo flash();
     <h2>Saisissez les traductions des vocabulaires</h2>
 
 <?php
+if (plugin_is_active('SimpleVocab')){
 echo $form;
+}else{
+  echo"<h1>Simple Vocab n'est pas actif</h1>";
+}
 echo foot();
 ?>
