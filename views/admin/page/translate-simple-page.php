@@ -31,10 +31,6 @@ $(window).on( "load", function() {
 */
     Omeka.wysiwyg({
         selector: 'babela-use-html',
-        menubar: 'edit view insert format table',
-//         plugins: 'lists link code paste media autoresize image table charmap hr',
-            toolbar: ["bold italic underline strikethrough | sub sup | forecolor backcolor | link | anchor | formatselect code | superscript subscript", "hr | alignleft aligncenter alignright alignjustify | indent outdent | bullist numlist | table | pastetext, pasteword | charmap | media | image"],
-            plugins: "lists,link,code,paste,autoresize,media,charmap,hr,table,textcolor,image, anchor",
         browser_spellcheck: true
     });
 
