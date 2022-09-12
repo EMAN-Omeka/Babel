@@ -21,19 +21,26 @@ echo flash();
   <li>
     <a href='<?php echo WEB_ROOT; ?>/admin/babela/terms'>Termes</a>
   </li>
+    <!--
     <li class='active'>
         <a href='<?php echo WEB_ROOT; ?>/admin/babela/list-exhibits-pages'>Expositions</a>
     </li>
     <li>
         <a href='<?php echo WEB_ROOT; ?>/admin/babela/tags'>Tags</a>
     </li>
+    -->
 </ul>
 </nav>
 
-<h2>Cliquez sur une exposition pour la traduire</h2>
-
 <?php
- echo $content;
- echo foot();
+if (plugin_is_active('ExhibitBuilder')) {
+    ?>
+    <h2>Cliquez sur une exposition pour la traduire</h2>
+    <?php
+    echo $content;
+} else {
+    echo "<h1>Exhibit Builder n'est pas actif</h1>";
+}
+echo foot();
 ?>
 

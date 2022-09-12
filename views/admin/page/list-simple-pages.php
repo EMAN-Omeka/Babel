@@ -21,12 +21,14 @@ echo flash();
         <li>
             <a href='<?php echo WEB_ROOT; ?>/admin/babela/terms'>Termes</a>
         </li>
+        <!--
         <li>
             <a href='<?php echo WEB_ROOT; ?>/admin/babela/list-exhibits-pages'>Expositions</a>
         </li>
         <li>
             <a href='<?php echo WEB_ROOT; ?>/admin/babela/tags'>Tags</a>
         </li>
+        -->
     </ul>
 </nav>
 
