@@ -48,6 +48,10 @@ The code changes are minor and shouldn't impact your site performance.
 
 This is a rather drastic choice, as modifying core is usually a bad idea, but in this case we considered the plugin's added value to be so high it was worth it.
 
+#### Module folder
+
+It must be "Babela".
+
 #### Theme
 
 To fully enjoy all the plugin's functionalities, you have to make some modifications to your theme.
@@ -157,7 +161,6 @@ Enabling the HTML editor will affect the original field and all the translation 
 The following elements can be translated :
 
 - Items
-- Files
 - Simple Pages
 - Menus
 - Strings echoed in theme files (via the ``t()`` function)
@@ -167,6 +170,7 @@ The following elements are NOT translated OR NOT FULLY, as of now :
 - Site's information
 - Exhibits
 - Collections
+- File
 
 Once an element is translated, the plugin detects the current language and displays the matching translation if it exists, the default language string if it doesn't.
 
