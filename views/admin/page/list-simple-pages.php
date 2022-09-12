@@ -30,10 +30,14 @@ echo flash();
     </ul>
 </nav>
 
-<h2>Cliquez sur une Simple Page pour la traduire</h2>
-
 <?php
-echo $content;
+if (plugin_is_active('SimplePages')) {
+    ?>
+    <h2>Cliquez sur une Simple Page pour la traduire</h2>
+    <?php
+    echo $content;
+} else {
+    echo "<h1>Simple Pages n'est pas actif</h1>";
+}
 echo foot();
 ?>
-
