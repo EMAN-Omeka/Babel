@@ -97,6 +97,15 @@ instead of
 ```php
 <?php echo simple_pages_display_breadcrumbs(); ?>
 ```
+ in some case ( Foundation theme based theme )
+
+or
+```php
+<?php echo simple_simple_pages_display_breadcrumbs(); ?>
+```
+
+in some case ( Berlin theme based theme )
+
 We have also implemented a methode "exhibit_builder_link_to_translate" to replace the function "exhibit_builder_link_to". To use it, you have to :
 
 put 
