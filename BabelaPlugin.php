@@ -564,15 +564,14 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
 
                 // We try to get a title translation
                 $resQueryTitle = $db->query("SELECT text FROM `$db->TranslationRecords` WHERE record_type LIKE 'SimplePageTitle' AND lang = '" . $current_lang . "' AND record_id = '" . $bPage->id . "'")->fetch();
-                if(isset($resQueryTitle['text'])){
-                $pageTitle = $resQueryTitle['text'];
-                }
                 // If no title translation, we use the original title
-                if (!isset($pageTitle)) {
+                if(!isset($resQueryTitle['text'])){
                     $pageTitle = $bPage->title;
+                }else{
+                    $pageTitle = $resQueryTitle['text'];
                 }
 
-                if ($bPage->id == $page->id) {
+                if ($bPage->id != $page->id) {
                     if ($includePage) {
                         $pageLinks[] = '<li><span class="current">' . html_escape($pageTitle) . '</span></li>';
                     }
