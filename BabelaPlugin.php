@@ -571,7 +571,7 @@ class BabelaPlugin extends Omeka_Plugin_AbstractPlugin
                     $pageTitle = $resQueryTitle['text'];
                 }
 
-                if ($bPage->id != $page->id) {
+                if ($bPage->id == $page->id) {
                     if ($includePage) {
                         $pageLinks[] = '<li><span class="current">' . html_escape($pageTitle) . '</span></li>';
                     }
